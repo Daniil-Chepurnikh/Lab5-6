@@ -19,7 +19,7 @@ namespace Lab5_6
             string[] mainMenu =
             [
                     "Создать таблицу",
-                    "Печать таблицы",
+                    "Напечатать таблицу",
                     "Добавить строку в начало таблицы",
                     "Удалить строки начиная с номера Н",
                     "Завершить работу"
@@ -57,6 +57,7 @@ namespace Lab5_6
                             break;
                         }
                 }
+
             } while (string.Equals(end, "Нет", StringComparison.OrdinalIgnoreCase));
         }
 
