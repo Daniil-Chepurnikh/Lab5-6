@@ -48,7 +48,7 @@ namespace Lab5_6
                         }
                     case 4:
                         {
-                            // TODO: вставить метод который удаляет К строк начиная с номера Н;
+                            // TODO: вставить метод который удаляет К строк начиная с номера Н в рваном массиве;
                             break;
                         }
                     case 5:
@@ -205,7 +205,7 @@ namespace Lab5_6
         /// Читает массив целых чисел с клавиатуры
         /// </summary>
         /// <returns>Прочитанный массив</returns>
-        private static int[,] ReadTable() // TODO: Переписать функцию под теущую задачу
+        private static int[,] ReadTable()
         {
             int strings, columns;
             (strings, columns) = GetTableSize();
@@ -225,7 +225,7 @@ namespace Lab5_6
         /// Создаёт массив датчиком случайных чисел
         /// </summary>
         /// <returns>Созданный массив</returns>
-        private static int[,] MakeRandomTable() // TODO: Переписать функцию под теущую задачу
+        private static int[,] MakeRandomTable()
         {
             int strings, columns;
             (strings, columns) = GetTableSize();
@@ -245,7 +245,7 @@ namespace Lab5_6
         /// Получает размеры таблицы
         /// </summary>
         /// <returns>Количество строк и столбцов</returns>
-        private static (int strings, int columns) GetTableSize() // TODO: Переписать функцию под теущую задачу
+        private static (int strings, int columns) GetTableSize()
         {
             bool isCorrect = true;
             int strings = 0;
