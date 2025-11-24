@@ -5,15 +5,56 @@ namespace Lab5_6
     internal class Program
     {
         static void Main(string[] args)
-        {
-            int[,] table = new int[0, 0];
-            
+        {            
             StartWork();
-            table = CreateTable();
+            DoWork();
             FinishWork();
-
-            // TODO: Сделать лабоараторную работу максимально качественно
         }
+
+        /// <summary>
+        /// Выполняет все требования пользователя
+        /// </summary>
+        private static void DoWork()
+        {
+            string[] mainMenu =
+            [
+                    "Создать таблицу",
+                    "Печать таблицы",
+                    "Добавить строку в начало таблицы",
+                    "Удалить строки начиная с номера Н",
+                    "Завершить работу"
+            ];
+
+            string end = "Нет";
+            int[,] table = new int[0, 0];
+            do
+            {
+                switch (PrintMenu(mainMenu))
+                {
+                    case 1:
+                        {
+                            table = CreateTable();
+                            break;
+                        }
+                    case 2:
+                        {
+                            PrintTable(table);
+                            break;
+                        }
+                    case 3:
+                        {
+                            // TODO: вставить метод который добавляет 1 строку в начало таблицы;
+                            break;
+                        }
+                    case 5:
+                        {
+                            end = "Да";
+                            break;
+                        }
+                }
+            } while (string.Equals(end, "Нет", StringComparison.OrdinalIgnoreCase));
+        }
+
 
         /// <summary>
         /// Печатает меню и принимает выбор пользователя
@@ -79,8 +120,8 @@ namespace Lab5_6
         {
             string[] arrayMenu =
             [
-                "Создать массив самостоятельно",
-                "Создать массив случайно"
+                "Создать таблицу самостоятельно",
+                "Создать таблицу случайно"
             ];
 
             int[,] table = new int[0, 0];
@@ -263,6 +304,48 @@ namespace Lab5_6
             Console.ResetColor();
         }
 
+        /// <summary>
+        /// Печатает таблицу
+        /// </summary>
+        /// <param name="table">Печатаемая таблица</param>
+        private static void PrintTable(int[,] table)
+        {
+            if(CheckEmpty(table))
+            {
+                PrintMessage("Таблица пустая", ConsoleColor.Cyan);
+                return;
+            }
+                
+            int count = 0;
+            int length = table.GetLength(0);
+            foreach (int item in table)
+            {
+                Console.Write(item + " ");
+                count++;
+                if (count == length) // напечатали строку - спустились на следующую
+                {
+                    Console.WriteLine();
+                    count = 0;
+                }
+            }   
+        }
+
+        /// <summary>
+        /// Проверяет таблицу на пустоту
+        /// </summary>
+        /// <param name="table">Проверяемая таблица</param>
+        /// <returns>True если пустая</returns>
+        private static bool CheckEmpty(int[,] table)
+        {
+            return table.Length == 0;
+        }
+
+        // TODO: написать метод который добавляет 1 строку в начало таблицы;
+
+        // TODO: написать метод который удаляет К строк начиная с номера Н в рваном массиве;
+
+
     }
+
 
 }
