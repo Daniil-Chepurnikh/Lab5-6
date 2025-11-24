@@ -347,6 +347,50 @@ namespace Lab5_6
         }
 
         // TODO: написать метод который добавляет 1 строку в начало таблицы;
+        private static int[,] AddString(int[,] table)
+        {
+            int newElementsCount = ReadInteger("Введите количество элементов в добавляемой строке");
+            int columns = table.GetLength(0);
+            if (newElementsCount <= 0)
+            {
+                PrintError($"Количество элементов в новой строке должно быть равно {columns}, чтобы массив не стал рваным ");
+                return table; // вернём что дали
+            }
+
+            int strings = table.GetLength(1);
+            int[,] result = new int[strings + 1, columns];
+
+            string[] addMenu =
+            [
+                    "Добавить строку самостоятельно",
+                    "Добавить строку случайно"
+            ];
+
+            switch (PrintMenu(addMenu, "Выберете способ добавления элементов:"))
+            {
+                case 1:
+                    {
+                        for (int p = 0; p < newElementsCount; p++)
+                        {
+                            result[0, p] = ReadInteger("Введите элемент массива: ");
+                        }
+                        break;
+                    }
+
+                case 2:
+                    {
+                        for (int p = 0; p < newElementsCount; p++)
+                        {
+                            result[0, p] = random.Next(-100, 100);
+                        }
+                        break;
+                    }
+            }
+
+
+
+            return table;
+        }
 
         // TODO: написать метод который удаляет К строк начиная с номера Н в рваном массиве;
 
