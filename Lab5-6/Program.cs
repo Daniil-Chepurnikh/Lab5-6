@@ -43,7 +43,7 @@ namespace Lab5_6
                         }
                     case 3:
                         {
-                            // TODO: вставить метод который добавляет 1 строку в начало таблицы;
+                            table = AddString(table);
                             break;
                         }
                     case 4:
@@ -249,28 +249,37 @@ namespace Lab5_6
         private static (int strings, int columns) GetTableSize()
         {
             bool isCorrect = true;
-            int strings = 0;
-            int columns = 0;
+            int strings = -1;
+            int columns = -1;
             do
             {
-                strings = ReadInteger("Введите количество строк таблицы: "); // разбираемся со строками
-                if (strings <= 0)
+                while (strings <= 0)
                 {
-                    PrintError("Количество строк должно быть больше нуля!");
-                    isCorrect = false;
-                    continue;
+                    strings = ReadInteger("Введите количество строк таблицы: "); // разбираемся со строками
+                    if (strings <= 0)
+                    {
+                        PrintError("Количество строк должно быть больше нуля!");
+                    }
+                }
+                while (columns <= 0)
+                {
+                    columns = ReadInteger("Введите количество столбцов таблицы: "); // разбираемся со столбцами
+                    if (columns <= 0)
+                    {
+                        PrintError("Количество столбцов должно быть больше нуля!");
+                    }
                 }
 
-                columns = ReadInteger("Введите количество столбцов таблицы: "); // разбираемся со столбцами
-                if (columns <= 0)
+                isCorrect= CheckTableSize(strings, columns);
+                if (!isCorrect)
                 {
-                    PrintError("Количество столбцов должно быть больше нуля!");
-                    isCorrect = false;
-                    continue;
+                    strings = -1;
+                    columns = -1;
                 }
-                isCorrect = CheckTableSize(strings, columns);
 
             } while (!isCorrect);
+            
+            
             return (strings, columns);
         }
 
@@ -279,7 +288,7 @@ namespace Lab5_6
         /// </summary>
         /// <param name="strings">Количество строк таблицы</param>
         /// <param name="columns">Количество столбцов таблицы</param>
-        /// <returns></returns>
+        /// <returns>True если размеры верные</returns>
         private static bool CheckTableSize(int strings, int columns)
         {
             bool isCorrectTableSize;
@@ -349,13 +358,22 @@ namespace Lab5_6
         // TODO: написать метод который добавляет 1 строку в начало таблицы;
         private static int[,] AddString(int[,] table)
         {
-            int newElementsCount = ReadInteger("Введите количество элементов в добавляемой строке");
             int columns = table.GetLength(0);
-            if (newElementsCount <= 0)
+            int newString;
+            bool isCorrect = true;
+            do
             {
-                PrintError($"Количество элементов в новой строке должно быть равно {columns}, чтобы массив не стал рваным ");
-                return table; // вернём что дали
-            }
+                newString = ReadInteger("Введите количество элементов в добавляемой строке");
+                if (newString <= 0 || newString > columns)
+                {
+                    PrintError($"Элементов в новой строке должно быть {columns}, чтобы массив не стал рваным!");
+                    isCorrect = false;
+                }
+                else
+                {
+                    isCorrect = true;
+                }
+            } while (!isCorrect);
 
             int strings = table.GetLength(1);
             int[,] result = new int[strings + 1, columns];
@@ -370,7 +388,7 @@ namespace Lab5_6
             {
                 case 1:
                     {
-                        for (int p = 0; p < newElementsCount; p++)
+                        for (int p = 0; p < newString; p++)
                         {
                             result[0, p] = ReadInteger("Введите элемент массива: ");
                         }
@@ -379,16 +397,14 @@ namespace Lab5_6
 
                 case 2:
                     {
-                        for (int p = 0; p < newElementsCount; p++)
+                        for (int p = 0; p < newString; p++)
                         {
                             result[0, p] = random.Next(-100, 100);
                         }
                         break;
                     }
             }
-
-
-
+            table = result;
             return table;
         }
 
