@@ -384,9 +384,49 @@ namespace Lab5_6
             return table;
         }
 
-        // TODO: написать метод который удаляет К строк начиная с номера Н в рваном массиве;
+        // TODO: написать метод который удаляет K строк начиная с номера N в рваном массиве;
+       
+        private static void DeleteStrings(int[][] table)
+        {
+            bool isCorrect = true;
+            int start;
+            do
+            {
+                start = ReadInteger("Введите номер, с которого начинается удаление строк:");
+                if (start < 0)
+                {
+                    PrintError("Номер строки не может быть отрицательным числом!");
+                    isCorrect = false;
+                }
+                else if (start > table.GetLength(0))
+                {
+                    PrintError("В массиве меньше строк!");
+                    isCorrect = false;
+                }
+            } while (!isCorrect);
 
+            int strings;
+            do
+            {
+                strings = ReadInteger("Введите количество строк, которые нужно удалиить:");
+                if (strings < 0)
+                {
+                    PrintError("Невозможно удалить отрицательное количество строк!");
+                    isCorrect = false;
+                }
+                else if (strings + start > table.GetLength(0))
+                {
+                    PrintError("В массиве меньше строк!");
+                    isCorrect = false;
+                }
+            } while (!isCorrect);
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private static int[,] CreateTable()
         {
             string[] arrayMenu =
