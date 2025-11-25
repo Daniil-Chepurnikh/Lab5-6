@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Lab5_6
 {
@@ -21,7 +22,7 @@ namespace Lab5_6
                     "Создать таблицу",
                     "Напечатать таблицу",
                     "Добавить строку в начало таблицы",
-                    "Удалить строки начиная с номера Н",
+                    "Удалить строки начиная с номера N",
                     "Завершить работу"
             ];
 
@@ -57,7 +58,6 @@ namespace Lab5_6
                             break;
                         }
                 }
-
             } while (string.Equals(end, "Нет", StringComparison.OrdinalIgnoreCase));
         }
 
@@ -77,9 +77,9 @@ namespace Lab5_6
                 do
                 {
                     PrintMessage(message);
-                    for (int i = 0; i < menu.Length; i++)
+                    for (int p = 0; p < menu.Length; p++)
                     {
-                        Console.WriteLine($"  {i + 1} " + menu[i]);
+                        Console.WriteLine($"  {p + 1} " + menu[p]);
                     }
 
                     Console.Write("Введите номер выбранного действия: ");
@@ -93,13 +93,12 @@ namespace Lab5_6
                 } while (!isCorrectAction);
 
                 Console.WriteLine("Вы выбрали дейстиве: " + menu[action - 1]);
-                Console.WriteLine("Вы уверены в своём выборе? Если уверены, напишите Да(в любом регистре), любой другой ввод будет воспринят как нет");
+                Console.WriteLine("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:");
                 choice = Console.ReadLine();
 
-            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase)); // подсказал интернет
+            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
 
             PrintMessage("Приступаю к выполнению команды");
-
             return action;
         }
 
@@ -126,8 +125,8 @@ namespace Lab5_6
         {
             string[] arrayMenu =
             [
-                "Создать таблицу самостоятельно",
-                "Создать таблицу случайно"
+                    "Создать таблицу самостоятельно",
+                    "Создать таблицу случайно"
             ];
 
             int[,] table = new int[0, 0];
@@ -248,7 +247,7 @@ namespace Lab5_6
         /// <returns>Количество строк и столбцов</returns>
         private static (int strings, int columns) GetTableSize()
         {
-            bool isCorrect = true;
+            bool isCorrect;
             int strings = -1;
             int columns = -1;
             do
@@ -278,8 +277,6 @@ namespace Lab5_6
                 }
 
             } while (!isCorrect);
-            
-            
             return (strings, columns);
         }
 
