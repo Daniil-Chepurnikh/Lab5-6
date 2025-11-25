@@ -355,7 +355,11 @@ namespace Lab5_6
             return table.Length == 0;
         }
 
-        // TODO: написать метод который добавляет 1 строку в начало таблицы;
+        /// <summary>
+        /// Добавляет строку в начало таблицы
+        /// </summary>
+        /// <param name="table">Таблица куда добавляем</param>
+        /// <returns>Изменённая таблица</returns>
         private static int[,] AddString(int[,] table)
         {
             int columns = table.GetLength(1);
