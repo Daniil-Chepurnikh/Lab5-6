@@ -21,7 +21,7 @@ namespace Lab5_6
             [
                     "Создать таблицу",
                     "Напечатать таблицу",
-                    "Добавить строку в начало таблицы(вызывать только в двумерном массиве)",
+                    "Добавить строку в начало таблицы",
                     "Удалить строки начиная с номера N",
                     "Завершить работу"
             ];
@@ -115,40 +115,7 @@ namespace Lab5_6
             Console.WriteLine("Здравствуйте!");
             PrintMessage("Работа начата", ConsoleColor.Cyan);
             stopwatch.Start();
-        }
-
-        /// <summary>
-        /// Создаёт массив выбранным способом
-        /// </summary>
-        /// <returns>Созданный массив</returns>
-        private static int[,] CreateTable()
-        {
-            string[] arrayMenu =
-            [
-                    "Создать таблицу самостоятельно",
-                    "Создать таблицу случайно"
-            ];
-
-            int[,] table = new int[0, 0];
-            bool isCreated = true;
-            do
-            {
-                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
-                {
-                    case 1:
-                        {
-                            table = ReadTable();
-                            break;
-                        }
-                    case 2:
-                        {
-                            table = MakeRandomTable();
-                            break;
-                        }
-                }
-            } while (!isCreated);
-            return table;
-        }
+        }        
 
         /// <summary>
         /// Уведомляет о завершении, времени выполнения и прощается
@@ -420,6 +387,34 @@ namespace Lab5_6
         // TODO: написать метод который удаляет К строк начиная с номера Н в рваном массиве;
 
 
+        private static int[,] CreateTable()
+        {
+            string[] arrayMenu =
+            [
+                    "Создать таблицу самостоятельно",
+                    "Создать таблицу случайно"
+            ];
+
+            int[,] table = new int[0, 0];
+            bool isCreated = true;
+            do
+            {
+                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
+                {
+                    case 1:
+                        {
+                            table = ReadTable();
+                            break;
+                        }
+                    case 2:
+                        {
+                            table = MakeRandomTable();
+                            break;
+                        }
+                }
+            } while (!isCreated);
+            return table;
+        }
     }
 
 
