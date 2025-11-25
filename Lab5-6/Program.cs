@@ -337,7 +337,7 @@ namespace Lab5_6
             {
                 Console.Write(item + " ");
                 count++;
-                if (count == length) // напечатали столбец спустились на следующую
+                if (count == length) // чтобы это выглядело по-людски построчно а не по сишарповски
                 {
                     Console.WriteLine();
                     count = 0;
