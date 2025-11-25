@@ -332,12 +332,12 @@ namespace Lab5_6
             }
                 
             int count = 0;
-            int length = table.GetLength(0);
+            int length = table.GetLength(1);
             foreach (int item in table)
             {
                 Console.Write(item + " ");
                 count++;
-                if (count == length) // напечатали строку - спустились на следующую
+                if (count == length) // напечатали столбец спустились на следующую
                 {
                     Console.WriteLine();
                     count = 0;
@@ -358,13 +358,13 @@ namespace Lab5_6
         // TODO: написать метод который добавляет 1 строку в начало таблицы;
         private static int[,] AddString(int[,] table)
         {
-            int columns = table.GetLength(0);
+            int columns = table.GetLength(1);
             int newString;
-            bool isCorrect = true;
+            bool isCorrect;
             do
             {
                 newString = ReadInteger("Введите количество элементов в добавляемой строке");
-                if (newString <= 0 || newString > columns)
+                if (newString != columns)
                 {
                     PrintError($"Элементов в новой строке должно быть {columns}, чтобы массив не стал рваным!");
                     isCorrect = false;
@@ -375,7 +375,7 @@ namespace Lab5_6
                 }
             } while (!isCorrect);
 
-            int strings = table.GetLength(1);
+            int strings = table.GetLength(0);
             int[,] result = new int[strings + 1, columns];
 
             string[] addMenu =
@@ -403,6 +403,14 @@ namespace Lab5_6
                         }
                         break;
                     }
+            }
+
+            for (int p = 1; p < strings + 1; p++)
+            {
+                for (int q = 0; q < columns; q++)
+                {
+                    result[p, q] = table[p - 1, q];
+                }
             }
             table = result;
             return table;
