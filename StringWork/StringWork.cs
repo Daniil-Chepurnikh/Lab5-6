@@ -2,7 +2,7 @@
 
 namespace StringWork
 {
-    internal class Program
+    internal class StringWork
     {
         static void Main(string[] args)
         {
