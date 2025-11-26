@@ -4,6 +4,9 @@ using Library;
 
 namespace Lab5_6
 {
+    /// <summary>
+    /// Работает с многомерными и рваными массивами
+    /// </summary>
     internal class ArrayWork
     {
         /// <summary>

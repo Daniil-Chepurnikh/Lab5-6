@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace Library
 {
+    /// <summary>
+    /// Вспомогательные функции
+    /// </summary>
     public class Helper
     {
         /// <summary>
