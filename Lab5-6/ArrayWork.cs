@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Library;
+using Microsoft.VisualBasic;
+using System;
 using System.Diagnostics;
-using Library;
 
 namespace Lab5_6
 {
@@ -32,37 +33,38 @@ namespace Lab5_6
         {
             string[] mainMenu =
             [
-                    "Создать таблицу",
-                    "Напечатать таблицу",
-                    "Добавить строку в начало таблицы",
-                    "Удалить строки начиная с номера N",
+                    "Создать массив",
+                    "Напечатать массив",
+                    "Добавить строку в начало двумерного массива",
+                    "Удалить K строк начиная с номера N в рваном массиве",
                     "Завершить работу"
             ];
 
             string end = "Нет";
-            int[,] table = new int[0, 0];
+            int[,] matrix = new int[0, 0];
+            int[][] jagged = new int[0][];
             do
             {
                 switch (Helper.PrintMenu(mainMenu))
                 {
                     case 1:
                         {
-                            table = CreateTable();
+                            matrix = CreateTable();
                             break;
                         }
                     case 2:
                         {
-                            Helper.PrintTable(table);
+                            Helper.PrintTable(matrix);
                             break;
                         }
                     case 3:
                         {
-                            table = AddString(table);
+                            matrix = AddString(matrix);
                             break;
                         }
                     case 4:
                         {
-                            // TODO: вставить метод который удаляет К строк начиная с номера Н в рваном массиве;
+                            DeleteStrings(jagged);
                             break;
                         }
                     case 5:
@@ -73,11 +75,6 @@ namespace Lab5_6
                 }
             } while (string.Equals(end, "Нет", StringComparison.OrdinalIgnoreCase));
         }
-
-        /// <summary>
-        /// Время выполнения программы
-        /// </summary>
-        private static Stopwatch stopwatch = new();
 
         /// <summary>
         /// Читает массив целых чисел с клавиатуры
@@ -185,13 +182,13 @@ namespace Lab5_6
         }
 
         // TODO: написать метод который удаляет K строк начиная с номера N в рваном массиве;
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="table"></param>
-        private static void DeleteStrings(int[][] table)
+        /// <summary>
+        /// Удаляет K строк начиная с номера N в рваном массиве
+        /// </summary>
+        /// <param name="table">Изменённая таблица</param>
+        private static int[][] DeleteStrings(int[][] table)
         {
-            bool isCorrect = true;
+            bool isCorrect;
             int start;
             do
             {
@@ -206,30 +203,56 @@ namespace Lab5_6
                     Helper.PrintError("В массиве меньше строк!");
                     isCorrect = false;
                 }
+                else 
+                {
+                    isCorrect = true;
+                }
             } while (!isCorrect);
 
-            int strings;
+            int deleteStrings;
             do
             {
-                strings = Helper.ReadInteger("Введите количество строк, которые нужно удалиить:");
-                if (strings < 0)
+                deleteStrings = Helper.ReadInteger("Введите количество строк, которые нужно удалиить:");
+                if (deleteStrings < 0)
                 {
                     Helper.PrintError("Невозможно удалить отрицательное количество строк!");
                     isCorrect = false;
                 }
-                else if (strings + start > table.GetLength(0))
+                else if (deleteStrings + start - 1 > table.GetLength(0))
                 {
                     Helper.PrintError("В массиве меньше строк!");
                     isCorrect = false;
                 }
+                else
+                {
+                    isCorrect = true;
+                }
             } while (!isCorrect);
 
+            int[][] result = new int[table.GetLength(0) - deleteStrings][];
+            
+            for (int p = 0; p < start; p++)
+            {
+                for (int q = 0; q < table.GetLength(1); q++)
+                {
+                    result[p][q] = table[p][q];
+                }
+            }
+            
+            for (int p = start; p < table.GetLength(0); p++)
+            {
+                for (int q = 0; q < table.GetLength(1); q++)
+                {
+                    result[p][q] = table[p][q];
+                }
+            }
+            return result;
         }
 
         /// <summary>
-        /// 
+        /// Создаёт многомерный массив
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Созданный массив</returns>
         private static int[,] CreateTable()
         {
             string[] arrayMenu =
