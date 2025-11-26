@@ -12,9 +12,9 @@ namespace Lab5_6
         /// <param name="args"></param>
         static void Main(string[] args)
         {            
-            StartWork();
+            Helper.StartWork();
             DoWork();
-            FinishWork();
+            Helper.FinishWork();
         }
 
         /// <summary>
@@ -71,71 +71,10 @@ namespace Lab5_6
             } while (string.Equals(end, "Нет", StringComparison.OrdinalIgnoreCase));
         }
 
-        ///// <summary>
-        ///// Печатает меню и принимает выбор пользователя
-        ///// </summary>
-        ///// <param name="menu">Массив возможных действий</param>
-        ///// <returns>Выбранное действие</returns>
-        //private static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность: ")
-        //{
-        //    uint action;
-        //    string? choice;
-        //    do
-        //    {
-        //        bool isCorrectAction;
-        //        do
-        //        {
-        //            PrintMessage(message);
-        //            for (int p = 0; p < menu.Length; p++)
-        //            {
-        //                Console.WriteLine($"  {p + 1} " + menu[p]);
-        //            }
-
-        //            Console.Write("Введите номер выбранного действия: ");
-        //            isCorrectAction = uint.TryParse(Console.ReadLine(), out action);
-
-        //            if (action > menu.Length || action == 0)
-        //            {
-        //                PrintError();
-        //                isCorrectAction = false;
-        //            }
-        //        } while (!isCorrectAction);
-
-        //        Console.WriteLine("Вы выбрали дейстиве: " + menu[action - 1]);
-        //        Console.WriteLine("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:");
-        //        choice = Console.ReadLine();
-
-        //    } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
-
-        //    PrintMessage("Приступаю к выполнению команды");
-        //    return action;
-        //}
-
         /// <summary>
         /// Время выполнения программы
         /// </summary>
         private static Stopwatch stopwatch = new();
-
-        /// <summary>
-        /// Здоровается, начинает работу
-        /// </summary>
-        private static void StartWork()
-        {
-            Console.WriteLine("Здравствуйте!");
-            Helper.PrintMessage("Работа начата", ConsoleColor.Cyan);
-            stopwatch.Start();
-        }        
-
-        /// <summary>
-        /// Уведомляет о завершении, времени выполнения и прощается
-        /// </summary>
-        private static void FinishWork()
-        {
-            Helper.PrintMessage("Работа закончена", ConsoleColor.Cyan);
-            stopwatch.Stop();
-            Console.WriteLine($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
-            Console.WriteLine("До свидания!");
-        }
 
         /// <summary>
         /// Читает массив целых чисел с клавиатуры

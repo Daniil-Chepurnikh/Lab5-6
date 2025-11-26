@@ -4,6 +4,11 @@ namespace Library
 {
     public class Helper
     {
+        /// <summary>
+        /// Время выполнения программы
+        /// </summary>
+        private static Stopwatch stopwatch = new();
+
         public static (int strings, int columns) GetTableSize()
         {
             bool isCorrect;
@@ -186,5 +191,26 @@ namespace Library
             Console.ResetColor();
         }
 
+
+        /// <summary>
+        /// Здоровается, начинает работу
+        /// </summary>
+        public static void StartWork()
+        {
+            Console.WriteLine("Здравствуйте!");
+            Helper.PrintMessage("Работа начата", ConsoleColor.Cyan);
+            stopwatch.Start();
+        }
+
+        /// <summary>
+        /// Уведомляет о завершении, времени выполнения и прощается
+        /// </summary>
+        public static void FinishWork()
+        {
+            Helper.PrintMessage("Работа закончена", ConsoleColor.Cyan);
+            stopwatch.Stop();
+            Console.WriteLine($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
+            Console.WriteLine("До свидания!");
+        }
     }
 }
