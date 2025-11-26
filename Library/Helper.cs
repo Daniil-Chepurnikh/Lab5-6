@@ -45,7 +45,7 @@ namespace Library
         /// <param name="strings">Количество строк таблицы</param>
         /// <param name="columns">Количество столбцов таблицы</param>
         /// <returns>True если размеры верные</returns>
-        public static bool CheckTableSize(int strings, int columns)
+        private static bool CheckTableSize(int strings, int columns)
         {
             bool isCorrectTableSize;
             try
@@ -110,7 +110,6 @@ namespace Library
         {
             return table.Length == 0;
         }
-
 
         /// <summary>
         /// Печатает меню и принимает выбор пользователя
