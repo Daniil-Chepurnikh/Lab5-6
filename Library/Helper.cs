@@ -202,7 +202,7 @@ namespace Library
         public static void StartWork()
         {
             Console.WriteLine("Здравствуйте!");
-            Helper.PrintMessage("Работа начата", ConsoleColor.Cyan);
+            PrintMessage("Работа начата", ConsoleColor.Cyan);
             stopwatch.Start();
         }
 
@@ -211,10 +211,236 @@ namespace Library
         /// </summary>
         public static void FinishWork()
         {
-            Helper.PrintMessage("Работа закончена", ConsoleColor.Cyan);
+            PrintMessage("Работа закончена", ConsoleColor.Cyan);
             stopwatch.Stop();
             Console.WriteLine($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
             Console.WriteLine("До свидания!");
+        }
+
+        /// <summary>
+        /// Читает массив целых чисел с клавиатуры
+        /// </summary>
+        /// <returns>Прочитанный массив</returns>
+        private static int[,] ReadTable()
+        {
+            int strings, columns;
+            (strings, columns) = GetTableSize();
+            int[,] readTable = new int[strings, columns];
+
+            for (int q = 0; q < strings; q++)
+            {
+                for (int p = 0; p < columns; p++)
+                {
+                    readTable[q, p] = ReadInteger("Введите элемент таблицы");
+                }
+            }
+            return readTable;
+        }
+
+        /// <summary>
+        /// Создаёт массив датчиком случайных чисел
+        /// </summary>
+        /// <returns>Созданный массив</returns>
+        private static int[,] MakeRandomTable()
+        {
+            int strings, columns;
+            (strings, columns) = GetTableSize();
+            int[,] randomTable = new int[strings, columns];
+
+            for (int q = 0; q < strings; q++)
+            {
+                for (int p = 0; p < columns; p++)
+                {
+                    randomTable[q, p] = random.Next(-100, 100);
+                }
+            }
+            return randomTable;
+        }
+
+        /// <summary>
+        /// Добавляет строку в начало таблицы
+        /// </summary>
+        /// <param name="table">Таблица куда добавляем</param>
+        /// <returns>Изменённая таблица</returns>
+        public static int[,] AddString(int[,] table)
+        {
+            int columns = table.GetLength(1);
+            int newString;
+            bool isCorrect;
+            do
+            {
+                newString = ReadInteger("Введите количество элементов в добавляемой строке");
+                if (newString != columns)
+                {
+                    PrintError($"Элементов в новой строке должно быть {columns}, чтобы массив не стал рваным!");
+                    isCorrect = false;
+                }
+                else
+                {
+                    isCorrect = true;
+                }
+            } while (!isCorrect);
+
+            int strings = table.GetLength(0);
+            int[,] result = new int[strings + 1, columns];
+
+            string[] addMenu =
+            [
+                    "Добавить строку самостоятельно",
+                    "Добавить строку случайно"
+            ];
+
+            switch (PrintMenu(addMenu, "Выберете способ добавления элементов:"))
+            {
+                case 1:
+                    {
+                        for (int p = 0; p < newString; p++)
+                        {
+                            result[0, p] = ReadInteger("Введите элемент массива: ");
+                        }
+                        break;
+                    }
+
+                case 2:
+                    {
+                        for (int p = 0; p < newString; p++)
+                        {
+                            result[0, p] = random.Next(-100, 100);
+                        }
+                        break;
+                    }
+            }
+
+            for (int p = 1; p < strings + 1; p++)
+            {
+                for (int q = 0; q < columns; q++)
+                {
+                    result[p, q] = table[p - 1, q];
+                }
+            }
+            table = result;
+            return table;
+        }
+
+        /// <summary>
+        /// Датчик случайных чисел
+        /// </summary>
+        private static Random random = new();
+
+        // TODO: написать метод который удаляет K строк начиная с номера N в рваном массиве;
+        /// <summary>
+        /// Удаляет K строк начиная с номера N в рваном массиве
+        /// </summary>
+        /// <param name="table">Изменённая таблица</param>
+        public static int[][] DeleteStrings(int[][] table)
+        {
+            bool isCorrect;
+            int start;
+            do
+            {
+                start = ReadInteger("Введите номер, с которого начинается удаление строк:");
+                if (start < 0)
+                {
+                    PrintError("Номер строки не может быть отрицательным числом!");
+                    isCorrect = false;
+                }
+                else if (start > table.GetLength(0))
+                {
+                    PrintError("В массиве меньше строк!");
+                    isCorrect = false;
+                }
+                else
+                {
+                    isCorrect = true;
+                }
+            } while (!isCorrect);
+
+            int deleteStrings;
+            do
+            {
+                deleteStrings = ReadInteger("Введите количество строк, которые нужно удалиить:");
+                if (deleteStrings < 0)
+                {
+                    PrintError("Невозможно удалить отрицательное количество строк!");
+                    isCorrect = false;
+                }
+                else if (deleteStrings + start - 1 > table.GetLength(0))
+                {
+                    PrintError("В массиве меньше строк!");
+                    isCorrect = false;
+                }
+                else
+                {
+                    isCorrect = true;
+                }
+            } while (!isCorrect);
+
+            int[][] result = new int[table.GetLength(0) - deleteStrings][];
+
+            for (int p = 0; p < start; p++)
+            {
+                for (int q = 0; q < CountColumns(table[p]); q++)
+                {
+                    result[p][q] = table[p][q];
+                }
+            }
+
+            for (int p = start; p < table.GetLength(0); p++)
+            {
+                for (int q = 0; q < CountColumns(table[p]); q++)
+                {
+                    result[p][q] = table[p][q];
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private static int CountColumns(int[] str)
+        {
+            int count = 0;
+            foreach (int p in str)
+            {
+                count++;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Создаёт многомерный массив
+        /// </summary>
+        /// <returns>Созданный массив</returns>
+        public static int[,] CreateTable()
+        {
+            string[] arrayMenu =
+            [
+                    "Создать таблицу самостоятельно",
+                    "Создать таблицу случайно"
+            ];
+
+            int[,] table = new int[0, 0];
+            bool isCreated = true;
+            do
+            {
+                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
+                {
+                    case 1:
+                        {
+                            table = ReadTable();
+                            break;
+                        }
+                    case 2:
+                        {
+                            table = MakeRandomTable();
+                            break;
+                        }
+                }
+            } while (!isCreated);
+            return table;
         }
     }
 }
