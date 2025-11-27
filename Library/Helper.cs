@@ -13,7 +13,7 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
-        public static (int strings, int columns) GetTableSize()
+        private static (int strings, int columns) GetTableSize()
         {
             int strings = -1;
             while (strings <= 0)
@@ -43,7 +43,7 @@ namespace Library
         /// </summary>
         /// <param name="message">Сообщение на печать</param>
         /// <param name="color">Цвет печать</param>
-        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
+        private static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(message);
@@ -81,7 +81,7 @@ namespace Library
         /// </summary>
         /// <param name="table">Проверяемая таблица</param>
         /// <returns>True если пустая</returns>
-        public static bool CheckEmpty(int[,] table)
+        private static bool CheckEmpty(int[,] table)
         {
             return table.Length == 0;
         }
@@ -132,7 +132,7 @@ namespace Library
         /// <param name="message">Приглашение к нужному вводу</param>
         /// <param name="error">Уведомление об ошибочном вводе</param>
         /// <returns>Прочитанное число</returns>
-        public static int ReadInteger(string message = "Введите количество элементов массива:", string error = "Вы не ввели целое число в разрешённом дипазоне!")
+        private static int ReadInteger(string message = "Введите количество элементов массива:", string error = "Вы не ввели целое число в разрешённом дипазоне!")
         {
             bool isNumber;
             int number;
@@ -154,7 +154,7 @@ namespace Library
         /// Сообщает об ошибках
         /// </summary>
         /// <param name="error">Печатаемая ошибка</param>
-        public static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
+        private static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Ошибка: " + error);
