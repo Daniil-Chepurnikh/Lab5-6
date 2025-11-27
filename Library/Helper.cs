@@ -15,61 +15,27 @@ namespace Library
 
         public static (int strings, int columns) GetTableSize()
         {
-            bool isCorrect;
             int strings = -1;
-            int columns = -1;
-            do
+            while (strings <= 0)
             {
-                while (strings <= 0)
+                strings = ReadInteger("Введите количество строк таблицы: "); // разбираемся со строками
+                if (strings <= 0)
                 {
-                    strings = ReadInteger("Введите количество строк таблицы: "); // разбираемся со строками
-                    if (strings <= 0)
-                    {
-                        PrintError("Количество строк должно быть больше нуля!");
-                    }
-                }
-                while (columns <= 0)
-                {
-                    columns = ReadInteger("Введите количество столбцов таблицы: "); // разбираемся со столбцами
-                    if (columns <= 0)
-                    {
-                        PrintError("Количество столбцов должно быть больше нуля!");
-                    }
-                }
-
-                isCorrect = CheckTableSize(strings, columns);
-                if (!isCorrect)
-                {
+                    PrintError("Количество строк должно быть больше нуля!");
                     strings = -1;
+                }
+            }
+            int columns = -1;
+            while (columns <= 0)
+            {
+                columns = ReadInteger("Введите количество столбцов таблицы: "); // разбираемся со столбцами
+                if (columns <= 0)
+                {
+                    PrintError("Количество столбцов должно быть больше нуля!");
                     columns = -1;
                 }
-
-            } while (!isCorrect);
+            }
             return (strings, columns);
-        }
-
-        /// <summary>
-        /// Проверяет переполнение памяти таблицей
-        /// </summary>
-        /// <param name="strings">Количество строк таблицы</param>
-        /// <param name="columns">Количество столбцов таблицы</param>
-        /// <returns>True если размеры верные</returns>
-        private static bool CheckTableSize(int strings, int columns)
-        {
-            bool isCorrectTableSize;
-            try
-            {
-                int[] stringsArray = new int[strings];
-                int[] columnsArray = new int[columns];
-                PrintMessage();
-                isCorrectTableSize = true;
-            }
-            catch (OutOfMemoryException)
-            {
-                PrintError("Переполнение памяти слишком большим массивом!");
-                isCorrectTableSize = false;
-            }
-            return isCorrectTableSize;
         }
 
         /// <summary>
