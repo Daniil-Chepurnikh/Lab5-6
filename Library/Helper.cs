@@ -285,9 +285,10 @@ namespace Library
         private static Random random = new();
 
         /// <summary>
-        /// Удаляет K строк начиная с номера N в рваном массиве
+        /// 
         /// </summary>
-        /// <param name="table">Изменённая таблица</param>
+        /// <param name="table"></param>
+        /// <returns></returns>
         public static int[][] DeleteStrings(int[][] table)
         {
             bool isCorrect;
@@ -334,6 +335,7 @@ namespace Library
 
             int[][] result = new int[table.GetLength(0) - deleteStrings][];
 
+            if (start +  deleteStrings > table.GetLength(0)) // TODO: придумать адекватное услвоие
             for (int p = 0; p < start; p++)
             {
                 for (int q = 0; q < CountColumns(table[p]); q++)
