@@ -42,7 +42,7 @@ namespace Lab5_6
                 {
                     case 1:
                         {
-                            matrix = Helper.CreateTable();
+                            matrix = Helper.CreateTable(matrix);
                             break;
                         }
                     case 2:

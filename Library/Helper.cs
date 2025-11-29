@@ -13,29 +13,19 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
-        private static (int strings, int columns) GetTableSize()
+        private static int GetTableSize(string error = "Количество строк должно быть больше нуля!", string message = "Введите количество строк таблицы: ")
         {
-            int strings = -1;
-            while (strings <= 0)
+            int size = -1;
+            while (size <= 0)
             {
-                strings = ReadInteger("Введите количество строк таблицы: "); // разбираемся со строками
-                if (strings <= 0)
+                size = ReadInteger(message); // разбираемся со строками
+                if (size <= 0)
                 {
-                    PrintError("Количество строк должно быть больше нуля!");
-                    strings = -1;
+                    PrintError(error);
+                    size = -1;
                 }
             }
-            int columns = -1;
-            while (columns <= 0)
-            {
-                columns = ReadInteger("Введите количество столбцов таблицы: "); // разбираемся со столбцами
-                if (columns <= 0)
-                {
-                    PrintError("Количество столбцов должно быть больше нуля!");
-                    columns = -1;
-                }
-            }
-            return (strings, columns);
+            return size;
         }
 
         /// <summary>
@@ -187,11 +177,12 @@ namespace Library
         /// Читает массив целых чисел с клавиатуры
         /// </summary>
         /// <returns>Прочитанный массив</returns>
-        private static int[,] ReadTable()
+        private static int[,] ReadTable(int[,] readTable)
         {
             int strings, columns;
-            (strings, columns) = GetTableSize();
-            int[,] readTable = new int[strings, columns];
+            strings = GetTableSize();
+            columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
+            readTable = new int[strings, columns];
 
             for (int q = 0; q < strings; q++)
             {
@@ -207,11 +198,12 @@ namespace Library
         /// Создаёт массив датчиком случайных чисел
         /// </summary>
         /// <returns>Созданный массив</returns>
-        private static int[,] MakeRandomTable()
+        private static int[,] MakeRandomTable(int[,] randomTable)
         {
             int strings, columns;
-            (strings, columns) = GetTableSize();
-            int[,] randomTable = new int[strings, columns];
+            strings = GetTableSize();
+            columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
+            randomTable = new int[strings, columns];
 
             for (int q = 0; q < strings; q++)
             {
@@ -293,7 +285,6 @@ namespace Library
         /// </summary>
         private static Random random = new();
 
-        // TODO: написать метод который удаляет K строк начиная с номера N в рваном массиве;
         /// <summary>
         /// Удаляет K строк начиная с номера N в рваном массиве
         /// </summary>
@@ -304,13 +295,14 @@ namespace Library
             int start;
             do
             {
+                int strings = table.GetLength(0);
                 start = ReadInteger("Введите номер, с которого начинается удаление строк:");
                 if (start < 0)
                 {
                     PrintError("Номер строки не может быть отрицательным числом!");
                     isCorrect = false;
                 }
-                else if (start > table.GetLength(0))
+                else if (start > strings)
                 {
                     PrintError("В массиве меньше строк!");
                     isCorrect = false;
@@ -380,7 +372,7 @@ namespace Library
         /// Создаёт многомерный массив
         /// </summary>
         /// <returns>Созданный массив</returns>
-        public static int[,] CreateTable()
+        public static int[,] CreateTable(int[,] table)
         {
             string[] arrayMenu =
             [
@@ -388,7 +380,6 @@ namespace Library
                     "Создать таблицу случайно"
             ];
 
-            int[,] table = new int[0, 0];
             bool isCreated = true;
             do
             {
@@ -396,17 +387,105 @@ namespace Library
                 {
                     case 1:
                         {
-                            table = ReadTable();
+                            table = ReadTable(table);
                             break;
                         }
                     case 2:
                         {
-                            table = MakeRandomTable();
+                            table = MakeRandomTable(table);
                             break;
                         }
                 }
             } while (!isCreated);
             return table;
         }
+
+
+        private static int[][] MakeRandomTable(int[][] randomJagged)
+        {
+            int strings;
+            strings = GetTableSize();
+            randomJagged = new int[strings][];
+
+
+            return randomJagged;
+        }
+
+
+        /// <summary>
+        /// Создаёт многомерный массив
+        /// </summary>
+        /// <returns>Созданный массив</returns>
+        public static int[][] CreateTable(int[][] jagged)
+        {
+            string[] arrayMenu =
+            [
+                    "Создать таблицу самостоятельно",
+                    "Создать таблицу случайно"
+            ];
+
+            bool isCreated = true;
+            do
+            {
+                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
+                {
+                    case 1:
+                        {
+                            jagged = ReadTable(jagged);
+                            break;
+                        }
+                    case 2:
+                        {
+                            jagged = MakeRandomTable(jagged);
+                            break;
+                        }
+                }
+            } while (!isCreated);
+            return jagged;
+        }
+
+        /// <summary>
+        /// Читает массив целых чисел с клавиатуры
+        /// </summary>
+        /// <returns>Прочитанный массив</returns>
+        private static int[][] ReadTable(int[][] jaggedTable)
+        {
+            int strings, columns;
+            strings = GetTableSize();
+            jaggedTable = new int[strings][];
+
+            for (int p = 0; p < strings; p++)
+            {
+                columns = GetTableSize("Количество столбцов должно быть больше нуля!","Введите количество столбцов:");
+                jaggedTable[p] = new int[columns];
+                
+                for (int q = 0; q < columns; q++)
+                {
+                    jaggedTable[p][q] = random.Next(-100, 100); 
+                }
+            }
+            return jaggedTable;
+        }
+
+        /// <summary>
+        /// Печатает таблицу
+        /// </summary>
+        /// <param name="table">Печатаемая таблица</param>
+        public static void PrintTable(int[][] table)
+        {
+            int count = 0;
+            int length = table.GetLength(1);
+            foreach (int[] item in table)
+            {
+                Console.Write(item + " ");
+                count++;
+                if (count == length) // чтобы это выглядело по-людски построчно а не по сишарповски
+                {
+                    Console.WriteLine();
+                    count = 0;
+                }
+            }
+        }
+
     }
 }
