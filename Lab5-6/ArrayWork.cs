@@ -36,6 +36,7 @@ namespace Lab5_6
             string end = "Нет";
             int[,] matrix = new int[0, 0];
             int[][] jagged = [];
+            // TODO: придумать как сделать удобное меню для работы с массивами
             do
             {
                 switch (Helper.PrintMenu(mainMenu))

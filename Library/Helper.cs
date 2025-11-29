@@ -151,7 +151,6 @@ namespace Library
             Console.ResetColor();
         }
 
-
         /// <summary>
         /// Здоровается, начинает работу
         /// </summary>
@@ -399,7 +398,6 @@ namespace Library
             } while (!isCreated);
             return table;
         }
-
 
         private static int[][] MakeRandomTable(int[][] randomJagged)
         {
