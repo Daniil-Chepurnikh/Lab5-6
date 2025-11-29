@@ -411,7 +411,6 @@ namespace Library
             return randomJagged;
         }
 
-
         /// <summary>
         /// Создаёт многомерный массив
         /// </summary>
@@ -479,13 +478,12 @@ namespace Library
             {
                 Console.Write(item + " ");
                 count++;
-                if (count == length) // чтобы это выглядело по-людски построчно а не по сишарповски
+                if (count == length) // чтобы это выглядело построчно
                 {
                     Console.WriteLine();
                     count = 0;
                 }
             }
         }
-
     }
 }
