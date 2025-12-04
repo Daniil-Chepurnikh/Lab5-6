@@ -132,7 +132,7 @@ namespace Library
         public static void StartWork()
         {
             Console.WriteLine("Здравствуйте!");
-            PrintMessage("Работа начата", ConsoleColor.Cyan);
+            PrintMessage("Работа начата", ConsoleColor.White);
             stopwatch.Start();
         }
 
@@ -141,7 +141,7 @@ namespace Library
         /// </summary>
         public static void FinishWork()
         {
-            PrintMessage("Работа закончена", ConsoleColor.Cyan);
+            PrintMessage("Работа закончена", ConsoleColor.White);
             stopwatch.Stop();
             Console.WriteLine($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
             Console.WriteLine("До свидания!");

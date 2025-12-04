@@ -115,9 +115,9 @@ namespace Lab5_6
                                 }
                             } while (string.Equals(main, "Нет", StringComparison.OrdinalIgnoreCase));
                             break;
-                        }
-                    case 3: // конец работы программы
-                        {
+                        } // конец работы с рваным массивом
+                    case 3:
+                        { // конец работы программы
                             end = "Да";
                             break;
                         }
