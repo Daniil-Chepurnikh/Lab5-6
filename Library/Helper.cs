@@ -13,7 +13,7 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
-        private static int GetTableSize(string error = "Количество строк должно быть больше нуля!", string message = "Введите количество строк таблицы: ")
+        private static int GetTableSize(string error = "Количество строк должно быть больше нуля!", string message = "Введите количество строк таблицы:  ")
         {
             int size = -1;
             while (size <= 0)
@@ -430,7 +430,7 @@ namespace Library
                 
                 for (int q = 0; q < columns; q++)
                 {
-                    readJagged[p][q] = random.Next(0, 9); 
+                    readJagged[p][q] = ReadInteger("Введите элемент массива:  "); 
                 }
             }
             return readJagged;
@@ -450,7 +450,7 @@ namespace Library
             {
                 for (int p = 0; p < columns; p++)
                 {
-                    readMatrix[q, p] = ReadInteger("Введите элемент таблицы");
+                    readMatrix[q, p] = ReadInteger("Введите элемент таблицы:  ");
                 }
             }
             return readMatrix;
@@ -475,7 +475,7 @@ namespace Library
             int length = table.GetLength(1);
             foreach (int item in table)
             {
-                PrintMessage(item + " ");
+                PrintMessage(item + " ", ConsoleColor.White);
                 count++;
                 if (count == length)
                 {
