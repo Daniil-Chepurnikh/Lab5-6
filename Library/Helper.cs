@@ -385,7 +385,7 @@ namespace Library
 
                 for (uint q = 0; q < columns; q++)
                 {
-                    randomJagged[p][q] = random.Next(0, 10);
+                    randomJagged[p][q] = random.Next(0, 9);
                 }
             }
             return randomJagged;
@@ -407,7 +407,7 @@ namespace Library
             {
                 for (int p = 0; p < columns; p++)
                 {
-                    randomTable[q, p] = random.Next(-100, 100);
+                    randomTable[q, p] = random.Next(0, 9);
                 }
             }
             return randomTable;
@@ -430,7 +430,7 @@ namespace Library
                 
                 for (int q = 0; q < columns; q++)
                 {
-                    readJagged[p][q] = random.Next(-100, 100); 
+                    readJagged[p][q] = random.Next(0, 9); 
                 }
             }
             return readJagged;
