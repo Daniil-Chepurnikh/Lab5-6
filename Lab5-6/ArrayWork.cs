@@ -45,7 +45,7 @@ namespace Lab5_6
                                     "Вернуться в главное меню"
                             ];
 
-                            int[,]  matrix = new int[0, 0];
+                            int[,] matrix = new int[0, 0];
                             string main = "Нет";
                             do
                             {
@@ -68,7 +68,7 @@ namespace Lab5_6
                                         }
                                     case 4:
                                         {
-                                            end = "Да";
+                                            main = "Да";
                                             break;
                                         }
                                 }
@@ -109,7 +109,7 @@ namespace Lab5_6
                                         }
                                     case 4:
                                         {
-                                            end = "Да";
+                                            main = "Да";
                                             break;
                                         }
                                 }

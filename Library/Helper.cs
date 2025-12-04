@@ -44,11 +44,21 @@ namespace Library
         /// <summary>
         /// Проверяет таблицу на пустоту
         /// </summary>
-        /// <param name="table">Проверяемая таблица</param>
+        /// <param name="matrix">Проверяемая таблица</param>
         /// <returns>True если пустая</returns>
-        private static bool CheckEmpty(int[,] table)
+        private static bool CheckEmpty(int[,] matrix)
         {
-            return table.Length == 0;
+            return matrix.Length == 0;
+        }
+
+        /// <summary>
+        /// Проверяет таблицу на пустоту
+        /// </summary>
+        /// <param name="jagged">Проверяемая таблица</param>
+        /// <returns>True если пустая</returns>
+        private static bool CheckEmpty(int[][] jagged)
+        {
+            return jagged.Length == 0;
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace Library
                     PrintMessage(message);
                     for (int p = 0; p < menu.Length; p++)
                     {
-                        Console.WriteLine($"  {p + 1} " + menu[p]);
+                        PrintMessage($"  {p + 1} " + menu[p] + '\n', ConsoleColor.White);
                     }
 
                     Console.Write("Введите номер выбранного действия: ");
@@ -81,8 +91,8 @@ namespace Library
                     }
                 } while (!isCorrectAction);
 
-                Console.WriteLine("Вы выбрали дейстиве: " + menu[action - 1]);
-                Console.WriteLine("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:");
+                PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
+                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:" + '\n', ConsoleColor.White);
                 choice = Console.ReadLine();
 
             } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
@@ -364,8 +374,6 @@ namespace Library
             int strings;
             strings = GetTableSize();
             randomJagged = new int[strings][];
-
-
             return randomJagged;
         }
 
@@ -395,44 +403,44 @@ namespace Library
         /// Читает рваный массив целых чисел с клавиатуры
         /// </summary>
         /// <returns>Прочитанный массив</returns>
-        private static int[][] ReadTable(int[][] jaggedTable)
+        private static int[][] ReadTable(int[][] readJagged)
         {
             int strings, columns;
             strings = GetTableSize();
-            jaggedTable = new int[strings][];
+            readJagged = new int[strings][];
 
             for (int p = 0; p < strings; p++)
             {
                 columns = GetTableSize("Количество столбцов должно быть больше нуля!","Введите количество столбцов:");
-                jaggedTable[p] = new int[columns];
+                readJagged[p] = new int[columns];
                 
                 for (int q = 0; q < columns; q++)
                 {
-                    jaggedTable[p][q] = random.Next(-100, 100); 
+                    readJagged[p][q] = random.Next(-100, 100); 
                 }
             }
-            return jaggedTable;
+            return readJagged;
         }
 
         /// <summary>
         /// Читает двумерный массив целых чисел с клавиатуры
         /// </summary>
         /// <returns>Прочитанный массив</returns>
-        private static int[,] ReadTable(int[,] readTable)
+        private static int[,] ReadTable(int[,] readMatrix)
         {
             int strings, columns;
             strings = GetTableSize();
             columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
-            readTable = new int[strings, columns];
+            readMatrix = new int[strings, columns];
 
             for (int q = 0; q < strings; q++)
             {
                 for (int p = 0; p < columns; p++)
                 {
-                    readTable[q, p] = ReadInteger("Введите элемент таблицы");
+                    readMatrix[q, p] = ReadInteger("Введите элемент таблицы");
                 }
             }
-            return readTable;
+            return readMatrix;
         }
         #endregion
 
@@ -446,7 +454,7 @@ namespace Library
         {
             if (CheckEmpty(table))
             {
-                PrintMessage("Таблица пустая", ConsoleColor.Cyan);
+                PrintMessage("Таблица пустая", ConsoleColor.White);
                 return;
             }
 
@@ -468,18 +476,25 @@ namespace Library
         /// Печатает рваный массив
         /// </summary>
         /// <param name="table">Печатаемый массив</param>
-        public static void PrintTable(int[][] table)
+        public static void PrintTable(int[][] jagged)
         {
-            int count = 0;
-            int length = table.GetLength(1);
-            foreach (int[] item in table)
+            if (CheckEmpty(jagged))
             {
-                Console.Write(item + " ");
-                count++;
-                if (count == length) // чтобы это выглядело построчно
+                PrintMessage("Таблица пустая", ConsoleColor.White);
+            }
+            else
+            {
+                int count = 0;
+                int length = jagged.GetLength(1);
+                foreach (int[] item in jagged)
                 {
-                    Console.WriteLine();
-                    count = 0;
+                    Console.Write(item + " ");
+                    count++;
+                    if (count == length) // чтобы это выглядело построчно
+                    {
+                        Console.WriteLine();
+                        count = 0;
+                    }
                 }
             }
         }
