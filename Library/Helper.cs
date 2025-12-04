@@ -462,7 +462,7 @@ namespace Library
         {
             if (CheckEmpty(table))
             {
-                PrintMessage("Таблица пустая", ConsoleColor.White);
+                PrintMessage("Матрица пустая" + '\n', ConsoleColor.White);
                 return;
             }
 
@@ -488,7 +488,7 @@ namespace Library
         {
             if (CheckEmpty(jagged))
             {
-                PrintMessage("Таблица пустая", ConsoleColor.White);
+                PrintMessage("Рваный массив пустой" + '\n', ConsoleColor.White);
             }
             else
             {
@@ -498,7 +498,7 @@ namespace Library
                 {
                     Console.Write(item + " ");
                     count++;
-                    if (count == length) // чтобы это выглядело построчно
+                    if (count == length)
                     {
                         Console.WriteLine();
                         count = 0;
@@ -506,7 +506,7 @@ namespace Library
                 }
             }
         }
-
+        
         #endregion
     }
 }
