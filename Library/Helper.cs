@@ -233,68 +233,74 @@ namespace Library
         /// <returns></returns>
         public static int[][] DeleteStrings(int[][] jagged)
         {
-            bool isCorrect;
-            
-            int start;
-            do
+            if (CheckEmpty(jagged))
             {
-                int strings = jagged.GetLength(0);
-                start = ReadInteger("Введите индекс, с которого начинается удаление строк:");
-                if (start < 0)
-                {
-                    PrintError("Номер строки не может быть отрицательным числом!");
-                    isCorrect = false;
-                }
-                else if (start > strings)
-                {
-                    PrintError("В массиве меньше строк!");
-                    isCorrect = false;
-                }
-                else
-                {
-                    isCorrect = true;
-                }
-            } while (!isCorrect);
-
-            int delete;
-            do
-            {
-                delete = ReadInteger("Введите количество строк, которые нужно удалиить:");
-                if (delete < 0)
-                {
-                    PrintError("Невозможно удалить отрицательное количество строк!");
-                    isCorrect = false;
-                }
-                else if (delete + start - 1 > jagged.GetLength(0))
-                {
-                    PrintError("В массиве меньше строк!");
-                    isCorrect = false;
-                }
-                else
-                {
-                    isCorrect = true;
-                }
-            } while (!isCorrect);
-
-            int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
-
-           // if (start +  delete > table.GetLength(0)) // TODO: придумать адекватное услвоие
-            for (int p = 0; p < start; p++)
-            {
-                for (int q = 0; q < jagged[p].Length; q++)
-                {
-                    result[p][q] = jagged[p][q];
-                }
+                PrintError("Невозможно удалить строки в пустом массиве!");
             }
-
-            for (int p = start; p < jagged.GetLength(0); p++)
+            else
             {
-                for (int q = 0; q < jagged[p].Length; q++)
+                bool isCorrect;
+                int start;
+                do
                 {
-                    result[p][q] = jagged[p][q];
+                    int strings = jagged.GetLength(0);
+                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:");
+                    if (start < 0)
+                    {
+                        PrintError("Номер строки не может быть отрицательным числом!");
+                        isCorrect = false;
+                    }
+                    else if (start > strings)
+                    {
+                        PrintError("В массиве меньше строк!");
+                        isCorrect = false;
+                    }
+                    else
+                    {
+                        isCorrect = true;
+                    }
+                } while (!isCorrect);
+
+                int delete;
+                do
+                {
+                    delete = ReadInteger("Введите количество строк, которые нужно удалиить:");
+                    if (delete < 0)
+                    {
+                        PrintError("Невозможно удалить отрицательное количество строк!");
+                        isCorrect = false;
+                    }
+                    else if (delete + start - 1 > jagged.GetLength(0))
+                    {
+                        PrintError("В массиве меньше строк!");
+                        isCorrect = false;
+                    }
+                    else
+                    {
+                        isCorrect = true;
+                    }
+                } while (!isCorrect);
+
+                int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
+
+                // if (start +  delete > table.GetLength(0)) // TODO: придумать адекватное услвоие
+                for (int p = 0; p < start; p++)
+                {
+                    for (int q = 0; q < jagged[p].Length; q++)
+                    {
+                        result[p][q] = jagged[p][q];
+                    }
                 }
+
+                for (int p = start; p < jagged.GetLength(0); p++)
+                {
+                    for (int q = 0; q < jagged[p].Length; q++)
+                    {
+                        result[p][q] = jagged[p][q];
+                    }
+                }
+                jagged = result;
             }
-            jagged = result;
             return jagged;
         }
 
@@ -370,17 +376,16 @@ namespace Library
         /// <returns>Созданный массив</returns>
         private static int[][] MakeRandomTable(int[][] randomJagged)
         {
-            PrintMessage("Введите количество строк:", ConsoleColor.White);
             int strings = GetTableSize();
             randomJagged = new int[strings][];
             for (uint p = 0; p < strings; p++)
             {
-                int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество столбцов таблицы");
+                int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество столбцов таблицы:  ");
                 randomJagged[p] = new int[columns];
 
                 for (uint q = 0; q < columns; q++)
                 {
-                    randomJagged[p][q] = random.Next(int.MinValue, int.MaxValue);
+                    randomJagged[p][q] = random.Next(0, 10);
                 }
             }
             return randomJagged;
@@ -492,17 +497,13 @@ namespace Library
             }
             else
             {
-                int count = 0;
-                int length = jagged.GetLength(1);
-                foreach (int[] item in jagged)
+                for (uint p = 0; p < jagged.GetLength(0); p++)
                 {
-                    Console.Write(item + " ");
-                    count++;
-                    if (count == length)
+                    foreach (int item in jagged[p])
                     {
-                        Console.WriteLine();
-                        count = 0;
+                        PrintMessage(item + " ", ConsoleColor.White); 
                     }
+                    PrintMessage("\n");
                 }
             }
         }

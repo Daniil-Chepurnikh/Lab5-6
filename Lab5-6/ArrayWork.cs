@@ -13,7 +13,7 @@ namespace Lab5_6
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
-        {            
+        {
             Helper.StartWork();
             DoWork();
             Helper.FinishWork();
