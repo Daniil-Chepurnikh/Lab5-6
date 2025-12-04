@@ -75,12 +75,12 @@ namespace Library
                 do
                 {
                     PrintMessage(message);
-                    for (int p = 0; p < menu.Length; p++)
+                    for (uint p = 0; p < menu.Length; p++)
                     {
                         PrintMessage($"  {p + 1} " + menu[p] + '\n', ConsoleColor.White);
                     }
 
-                    Console.Write("Введите номер выбранного действия: ");
+                    PrintMessage("Введите номер выбранного действия:", ConsoleColor.White);
                     isCorrectAction = uint.TryParse(Console.ReadLine(), out action);
 
                     if (action > menu.Length || action == 0)
@@ -91,7 +91,7 @@ namespace Library
                 } while (!isCorrectAction);
 
                 PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
-                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:" + '\n', ConsoleColor.White);
+                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:", ConsoleColor.White);
                 choice = Console.ReadLine();
 
             } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
@@ -112,7 +112,7 @@ namespace Library
             int number;
             do
             {
-                Console.WriteLine(message);
+                PrintMessage(message, ConsoleColor.White);
 
                 isNumber = int.TryParse(Console.ReadLine(), out number);
                 if (!isNumber)
@@ -140,7 +140,7 @@ namespace Library
         /// </summary>
         public static void StartWork()
         {
-            Console.WriteLine("Здравствуйте!");
+            PrintMessage("Здравствуйте!", ConsoleColor.White);
             PrintMessage("Работа начата", ConsoleColor.White);
             stopwatch.Start();
         }
@@ -370,9 +370,19 @@ namespace Library
         /// <returns>Созданный массив</returns>
         private static int[][] MakeRandomTable(int[][] randomJagged)
         {
-            int strings;
-            strings = GetTableSize();
+            PrintMessage("Введите количество строк:", ConsoleColor.White);
+            int strings = GetTableSize();
             randomJagged = new int[strings][];
+            for (uint p = 0; p < strings; p++)
+            {
+                int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество столбцов таблицы");
+                randomJagged[p] = new int[columns];
+
+                for (uint q = 0; q < columns; q++)
+                {
+                    randomJagged[p][q] = random.Next(int.MinValue, int.MaxValue);
+                }
+            }
             return randomJagged;
         }
 
@@ -427,9 +437,8 @@ namespace Library
         /// <returns>Прочитанный массив</returns>
         private static int[,] ReadTable(int[,] readMatrix)
         {
-            int strings, columns;
-            strings = GetTableSize();
-            columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
+            int strings = GetTableSize();
+            int columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
             readMatrix = new int[strings, columns];
 
             for (int q = 0; q < strings; q++)
@@ -461,11 +470,11 @@ namespace Library
             int length = table.GetLength(1);
             foreach (int item in table)
             {
-                Console.Write(item + " ");
+                PrintMessage(item + " ");
                 count++;
-                if (count == length) // чтобы это выглядело по-людски построчно а не по сишарповски
+                if (count == length)
                 {
-                    Console.WriteLine();
+                    PrintMessage("\n");
                     count = 0;
                 }
             }
