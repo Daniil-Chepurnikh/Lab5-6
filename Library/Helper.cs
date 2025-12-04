@@ -36,7 +36,7 @@ namespace Library
         private static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(message);
+            Console.Write(message);
             Console.ResetColor();
         }
 
@@ -74,13 +74,13 @@ namespace Library
                 bool isCorrectAction;
                 do
                 {
-                    PrintMessage(message);
+                    PrintMessage(message + '\n');
                     for (uint p = 0; p < menu.Length; p++)
                     {
-                        PrintMessage($"  {p + 1} " + menu[p] + '\n', ConsoleColor.White);
+                        PrintMessage($"  {p + 1} " + menu[p] + '\n' + '\n', ConsoleColor.White);
                     }
 
-                    PrintMessage("Введите номер выбранного действия:", ConsoleColor.White);
+                    PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
                     isCorrectAction = uint.TryParse(Console.ReadLine(), out action);
 
                     if (action > menu.Length || action == 0)
@@ -91,12 +91,12 @@ namespace Library
                 } while (!isCorrectAction);
 
                 PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
-                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:", ConsoleColor.White);
+                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
                 choice = Console.ReadLine();
 
             } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
 
-            PrintMessage("Приступаю к выполнению команды");
+            PrintMessage("Приступаю к выполнению команды" + '\n');
             return action;
         }
 
@@ -106,7 +106,7 @@ namespace Library
         /// <param name="message">Приглашение к нужному вводу</param>
         /// <param name="error">Уведомление об ошибочном вводе</param>
         /// <returns>Прочитанное число</returns>
-        private static int ReadInteger(string message = "Введите количество элементов массива:", string error = "Вы не ввели целое число в разрешённом дипазоне!")
+        private static int ReadInteger(string message = "Введите количество элементов массива:  ", string error = "Вы не ввели целое число в разрешённом дипазоне!")
         {
             bool isNumber;
             int number;
@@ -140,8 +140,8 @@ namespace Library
         /// </summary>
         public static void StartWork()
         {
-            PrintMessage("Здравствуйте!", ConsoleColor.White);
-            PrintMessage("Работа начата", ConsoleColor.White);
+            PrintMessage("Здравствуйте!" + '\n', ConsoleColor.White);
+            PrintMessage("Работа начата" + '\n', ConsoleColor.White);
             stopwatch.Start();
         }
 
@@ -152,8 +152,8 @@ namespace Library
         {
             PrintMessage("Работа закончена", ConsoleColor.White);
             stopwatch.Stop();
-            Console.WriteLine($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс");
-            Console.WriteLine("До свидания!");
+            PrintMessage($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n');
+            PrintMessage("До свидания!");
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Library
             bool isCreated = true;
             do
             {
-                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
+                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:  "))
                 {
                     case 1:
                         {
@@ -420,7 +420,7 @@ namespace Library
 
             for (int p = 0; p < strings; p++)
             {
-                columns = GetTableSize("Количество столбцов должно быть больше нуля!","Введите количество столбцов:");
+                columns = GetTableSize("Количество столбцов должно быть больше нуля!","Введите количество столбцов:  ");
                 readJagged[p] = new int[columns];
                 
                 for (int q = 0; q < columns; q++)

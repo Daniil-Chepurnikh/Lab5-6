@@ -82,29 +82,29 @@ namespace Lab5_6
                             [
                                     "Создать",
                                     "Напечатать",
-                                    "Удалить ",
+                                    "Удалить определённое количество строк, начиная с определённого номера",
                                     "Вернуться в главное меню"
                             ];
 
-                            int[,] matrix = new int[0, 0];
+                            int[][] jagged = [];
                             string main = "Нет";
                             do
                             {
-                                switch (Helper.PrintMenu(jaggedMenu, "Выберете, что вы хотите сделать далее с двумерным массивом"))
+                                switch (Helper.PrintMenu(jaggedMenu, "Выберете, что вы хотите сделать далее с рваным массивом"))
                                 {
                                     case 1:
                                         {
-                                            matrix = Helper.CreateTable(matrix);
+                                            jagged = Helper.CreateTable(jagged);
                                             break;
                                         }
                                     case 2:
                                         {
-                                            Helper.PrintTable(matrix);
+                                            Helper.PrintTable(jagged);
                                             break;
                                         }
                                     case 3:
                                         {
-                                            matrix = Helper.AddString(matrix);
+                                            jagged = Helper.DeleteStrings(jagged);
                                             break;
                                         }
                                     case 4:
