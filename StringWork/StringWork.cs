@@ -7,9 +7,16 @@ namespace StringWork
     {
         static void Main(string[] args)
         {
+            Helper.StartWork();
+            DoWork();
+            Helper.FinishWork();
+        }
+
+        private static void DoWork()
+        {
             string[] testMenu =
-            [
-                    "Николай Алексеевич Заболоцкий \"Некрасивая девочка\"",
+[
+                    "Николай Алексеевич Заболоцкий. Некрасивая девочка",
                     "Среди других играющих детей",
                     "Она напоминает лягушонка.",
                     "Заправлена в трусы худая рубашонка,",
@@ -48,6 +55,9 @@ namespace StringWork
                     "Сосуд она, в котором пустота,",
                     "Или огонь, мерцающий в сосуде?"
             ];
+
+            
         }
+
     }
 }
