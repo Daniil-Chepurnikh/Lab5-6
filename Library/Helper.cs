@@ -290,8 +290,6 @@ namespace Library
                 } while (!isCorrect);
 
                 int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
-
-                // if (start +  delete > table.GetLength(0)) // TODO: придумать адекватное услвоие
                 for (int p = 0; p < start; p++)
                 {
                     for (int q = 0; q < jagged[p].Length; q++)
@@ -300,11 +298,11 @@ namespace Library
                     }
                 }
 
-                for (int p = start; p < jagged.GetLength(0); p++)
+                for (int p = start + delete - 1; p < jagged.GetLength(0); p++)
                 {
                     for (int q = 0; q < jagged[p].Length; q++)
                     {
-                        result[p][q] = jagged[p][q];
+                        result[p - delete][q] = jagged[p][q];
                     }
                 }
                 jagged = result;
