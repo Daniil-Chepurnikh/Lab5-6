@@ -21,7 +21,7 @@ namespace Library
             int size = -1;
             while (size <= 0 || size > MaxSize)
             {
-                size = ReadInteger(message); // разбираемся со строками
+                size = ReadInteger(message);
                 if (size <= 0 || size > MaxSize)
                 {
                     PrintError(error);
@@ -418,7 +418,7 @@ namespace Library
         private static int[,] MakeRandomTable(int[,] randomTable)
         {
             int strings = GetTableSize();
-            int columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов таблицы: ");
+            int columns = GetTableSize("Количество столбцов должно быть больше нуля и меньше максимального допустимого значния 100!", "Введите количество столбцов таблицы: ");
             if (CheckTableSize(strings) && CheckTableSize(columns))
             {
                 randomTable = new int[strings, columns];
