@@ -36,7 +36,7 @@ namespace Library
         /// </summary>
         /// <param name="message">Сообщение на печать</param>
         /// <param name="color">Цвет печать</param>
-        private static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
+        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
         {
             Console.ForegroundColor = color;
             Console.Write(message);
@@ -152,7 +152,7 @@ namespace Library
         /// </summary>
         public static void FinishWork()
         {
-            PrintMessage("Работа закончена", ConsoleColor.White);
+            PrintMessage("Работа закончена" + '\n', ConsoleColor.White);
             stopwatch.Stop();
             PrintMessage($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n');
             PrintMessage("До свидания!");
@@ -550,7 +550,7 @@ namespace Library
         /// Получает ввод пользователя
         /// </summary>
         /// <returns>Строка введённая пользователем</returns>
-        private static string? ReadData()
+        public static string? ReadData()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             string? choice = Console.ReadLine();
