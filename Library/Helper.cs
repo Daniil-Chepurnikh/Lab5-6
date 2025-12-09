@@ -190,8 +190,7 @@ namespace Library
                 } while (!isCorrect);
 
                 int strings = table.GetLength(0);
-                int[,] result = new int[0, 0];
-
+                int[,] result = new int[table.GetLength(0) + 1, table.GetLength(1)];
                 string[] addMenu =
                 [
                         "Добавить строку самостоятельно",
