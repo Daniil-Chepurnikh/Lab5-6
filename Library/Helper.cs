@@ -84,7 +84,7 @@ namespace Library
                     }
 
                     PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
-                    isCorrectAction = uint.TryParse(Console.ReadLine(), out action);
+                    isCorrectAction = uint.TryParse(ReadData(), out action);
                     if (action > menu.Length || action == 0)
                     {
                         PrintError();
@@ -94,7 +94,7 @@ namespace Library
 
                 PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
                 PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
-                choice = Console.ReadLine();
+                choice = ReadData();
 
             } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
 
@@ -116,7 +116,7 @@ namespace Library
             {
                 PrintMessage(message, ConsoleColor.White);
 
-                isNumber = int.TryParse(Console.ReadLine(), out number);
+                isNumber = int.TryParse(ReadData(), out number);
                 if (!isNumber)
                 {
                     PrintError(error);
@@ -545,5 +545,17 @@ namespace Library
         {
             return !(size <= 0 || size > MaxSize);
         }
+
+        /// <summary>
+        /// Получает ввод пользователя
+        /// </summary>
+        /// <returns>Строка введённая пользователем</returns>
+        private static string? ReadData()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            string? choice = Console.ReadLine();
+            Console.ResetColor();
+            return choice;
+        }
     }
-}
+} 
