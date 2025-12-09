@@ -16,7 +16,7 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
-        private static int GetTableSize(string error = "Количество строк должно быть больше нуля  меньше максимального допустимого значения - 100!", string message = "Введите количество строк таблицы:  ")
+        private static int GetTableSize(string error = "Количество строк должно быть больше нуля и меньше максимального допустимого значения - 100!", string message = "Введите количество строк таблицы:  ")
         {
             int size = -1;
             while (size <= 0 || size > MaxSize)
@@ -85,7 +85,6 @@ namespace Library
 
                     PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
                     isCorrectAction = uint.TryParse(Console.ReadLine(), out action);
-
                     if (action > menu.Length || action == 0)
                     {
                         PrintError();
@@ -191,12 +190,12 @@ namespace Library
 
                 int strings = table.GetLength(0);
                 int[,] result = new int[table.GetLength(0) + 1, table.GetLength(1)];
+                
                 string[] addMenu =
                 [
                         "Добавить строку самостоятельно",
                         "Добавить строку случайно"
                 ];
-
                 switch (PrintMenu(addMenu, "Выберете способ добавления элементов:  "))
                 {
                     case 1:
@@ -321,24 +320,19 @@ namespace Library
                     "Создать таблицу самостоятельно",
                     "Создать таблицу случайно"
             ];
-
-            bool isCreated = true;
-            do
+            switch (PrintMenu(arrayMenu, "Выберете способ создания массива:  "))
             {
-                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:  "))
-                {
-                    case 1:
-                        {
-                            table = ReadTable(table);
-                            break;
-                        }
-                    case 2:
-                        {
-                            table = MakeRandomTable(table);
-                            break;
-                        }
-                }
-            } while (!isCreated);
+                case 1:
+                    {
+                        table = ReadTable(table);
+                        break;
+                    }
+                case 2:
+                    {
+                        table = MakeRandomTable(table);
+                        break;
+                    }
+            }
             return table;
         }
 
@@ -353,24 +347,20 @@ namespace Library
                     "Создать таблицу самостоятельно",
                     "Создать таблицу случайно"
             ];
-
-            bool isCreated = true;
-            do
+            
+            switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
             {
-                switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
-                {
-                    case 1:
-                        {
-                            jagged = ReadTable(jagged);
-                            break;
-                        }
-                    case 2:
-                        {
-                            jagged = MakeRandomTable(jagged);
-                            break;
-                        }
-                }
-            } while (!isCreated);
+               case 1:
+                    {
+                        jagged = ReadTable(jagged);
+                        break;
+                    }
+               case 2:
+                    {
+                        jagged = MakeRandomTable(jagged);
+                        break;
+                    }
+            }
             return jagged;
         }
 
@@ -382,7 +372,6 @@ namespace Library
         private static int[][] MakeRandomTable(int[][] randomJagged)
         {
             int strings = GetTableSize();
-
             if (!CheckTableSize(strings))
             {
                 PrintError("Массив вышел из допустимого диапазона!");
@@ -392,13 +381,12 @@ namespace Library
                 randomJagged = new int[strings][];
                 for (uint p = 0; p < strings; p++)
                 {
-                    int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество столбцов таблицы:  ");
+                    int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество элементов в строке:  ");
                     if (!CheckTableSize(columns))
                     {
                         PrintError("Массив вышел из допустимого диапазона!");
                         break;
                     }
-                    
                     randomJagged[p] = new int[columns];
                     for (uint q = 0; q < columns; q++)
                     {
@@ -452,7 +440,7 @@ namespace Library
                 readJagged = new int[strings][];
                 for (int p = 0; p < strings; p++)
                 {
-                    int columns = GetTableSize("Количество столбцов должно быть больше нуля!", "Введите количество столбцов:  ");
+                    int columns = GetTableSize("Количество столбцов должно быть больше нуля и меньше максимального допустимого значения 100!", "Введите количество элементов строки:  ");
                     if (!CheckTableSize(columns))
                     {
                         PrintError("Массив вышел из допустимого диапазона!");
@@ -555,12 +543,7 @@ namespace Library
         /// <returns>True если размеры корректные</returns>
         private static bool CheckTableSize(int size)
         {
-            bool result = false;
-            if (!(size  <= 0 || size > MaxSize))
-            {
-                result = true;
-            }
-            return result;
+            return !(size <= 0 || size > MaxSize);
         }
     }
 }
