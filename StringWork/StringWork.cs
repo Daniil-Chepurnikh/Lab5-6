@@ -77,10 +77,7 @@ namespace StringWork
                         newString = testMenu[Helper.PrintMenu(testMenu, "Выберете нужную строку")];
                         break;
                     }
-
             }
-
         }
-
     }
-}
+} 
