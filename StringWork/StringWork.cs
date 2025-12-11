@@ -64,7 +64,7 @@ namespace StringWork
             ];
 
             string? newString;
-            switch(Helper.PrintMenu(mainMenu, "Выберете, как вы хотите создать строку?"))
+            switch (Helper.PrintMenu(mainMenu, "Выберете, как вы хотите создать строку?"))
             {
                 case 1:
                     {
@@ -77,7 +77,59 @@ namespace StringWork
                         newString = testMenu[Helper.PrintMenu(testMenu, "Выберете нужную строку")];
                         break;
                     }
+                    default:
+                    {
+                        newString = "Рок жив!";
+                        break;
+                    }
             }
+
+            string[] prepareString = PrepareString(newString);
+            Swap(prepareString, 0, prepareString.Length - 1);
+
+            string finalString = string.Join(" ", prepareString);
+            Console.WriteLine(finalString);
         }
+
+        /// <summary>
+        /// Меняет местами два слова
+        /// </summary>
+        /// <param name="str">Там где меняем слова</param>
+        /// <param name="indexFirst">Индекс первого слова</param>
+        /// <param name="indexSecond">Индекс второго слова</param>        
+        private static void Swap(string[] str, int indexFirst, int indexSecond)
+        {
+            string temp = str[indexFirst];
+            str[indexFirst] = str[indexSecond];
+            str[indexSecond] = temp;
+        }
+
+        /// <summary>
+        /// Готовит строку к проверке на ошибки и дальнейшей работе
+        /// </summary>
+        /// <param name="str">Строка для подготовки</param>
+        /// <returns></returns>
+        private static string[] PrepareString(string? str)
+        {
+            string? stringTrim = str.Trim();
+            string[] stringSprlit = stringTrim.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            return stringSprlit;
+        }
+
+        private static bool CheckPunctuation(string[] str) // TODO: доделать функцию
+        {
+            bool result = false;
+
+            for (uint p = 0; p < str.Length; p++)
+            {
+                if (str[p] == ",")
+                {
+
+                }
+            }
+            return result;
+        }
+
+
     }
-} 
+}
