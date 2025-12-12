@@ -32,18 +32,6 @@ namespace Library
         }
 
         /// <summary>
-        /// Печатаем красивые сообщения пользователю
-        /// </summary>
-        /// <param name="message">Сообщение на печать</param>
-        /// <param name="color">Цвет печать</param>
-        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
-        {
-            Console.ForegroundColor = color;
-            Console.Write(message);
-            Console.ResetColor();
-        }
-
-        /// <summary>
         /// Проверяет таблицу на пустоту
         /// </summary>
         /// <param name="matrix">Проверяемая таблица</param>
@@ -61,6 +49,55 @@ namespace Library
         private static bool CheckEmpty(int[][] jagged)
         {
             return jagged.Length == 0;
+        }
+
+        #region Чтение-печать
+
+        /// <summary>
+        /// Читает целое число и сообщает об ошибках ввода оного
+        /// </summary>
+        /// <param name="message">Приглашение к нужному вводу</param>
+        /// <param name="error">Уведомление об ошибочном вводе</param>
+        /// <returns>Прочитанное число</returns>
+        private static int ReadInteger(string message = "Введите количество элементов массива:  ", string error = "Вы не ввели целое число в разрешённом дипазоне!")
+        {
+            bool isNumber;
+            int number;
+            do
+            {
+                PrintMessage(message, ConsoleColor.White);
+
+                isNumber = int.TryParse(ReadData(), out number);
+                if (!isNumber)
+                {
+                    PrintError(error);
+                }
+
+            } while (!isNumber);
+            return number;
+        }
+
+        /// <summary>
+        /// Сообщает об ошибках
+        /// </summary>
+        /// <param name="error">Печатаемая ошибка</param>
+        private static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ошибка: " + error);
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Получает ввод пользователя
+        /// </summary>
+        /// <returns>Строка введённая пользователем</returns>
+        public static string? ReadData()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            string? choice = Console.ReadLine();
+            Console.ResetColor();
+            return choice;
         }
 
         /// <summary>
@@ -103,39 +140,18 @@ namespace Library
         }
 
         /// <summary>
-        /// Читает целое число и сообщает об ошибках ввода оного
+        /// Печатаем красивые сообщения пользователю
         /// </summary>
-        /// <param name="message">Приглашение к нужному вводу</param>
-        /// <param name="error">Уведомление об ошибочном вводе</param>
-        /// <returns>Прочитанное число</returns>
-        private static int ReadInteger(string message = "Введите количество элементов массива:  ", string error = "Вы не ввели целое число в разрешённом дипазоне!")
+        /// <param name="message">Сообщение на печать</param>
+        /// <param name="color">Цвет печать</param>
+        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
         {
-            bool isNumber;
-            int number;
-            do
-            {
-                PrintMessage(message, ConsoleColor.White);
-
-                isNumber = int.TryParse(ReadData(), out number);
-                if (!isNumber)
-                {
-                    PrintError(error);
-                }
-
-            } while (!isNumber);
-            return number;
-        }
-
-        /// <summary>
-        /// Сообщает об ошибках
-        /// </summary>
-        /// <param name="error">Печатаемая ошибка</param>
-        private static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ошибка: " + error);
+            Console.ForegroundColor = color;
+            Console.Write(message);
             Console.ResetColor();
         }
+
+        #endregion
 
         /// <summary>
         /// Здоровается, начинает работу
@@ -245,62 +261,51 @@ namespace Library
             }
             else
             {
-                bool isCorrect;
                 int start;
                 do
                 {
-                    int strings = jagged.GetLength(0);
-                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:");
-                    if (start < 0)
+                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:   ");
+                    if (start <= 0)
                     {
-                        PrintError("Номер строки не может быть отрицательным числом!");
-                        isCorrect = false;
+                        PrintError("Номер строки должен быть положительным числом!");
                     }
-                    else if (start >= strings)
+                    else if (start > jagged.GetLength(0))
                     {
-                        PrintError("В массиве меньше строк!");
-                        isCorrect = false;
+                        PrintError("В массиве недостаточно строк!");
                     }
-                    else
-                    {
-                        isCorrect = true;
-                    }
-                } while (!isCorrect);
+                } while (start <= 0 || start > jagged.GetLength(0));
 
                 int delete;
                 do
                 {
-                    delete = ReadInteger("Введите количество строк, которые нужно удалиить:");
-                    if (delete < 0)
+                    delete = ReadInteger("Введите количество строк, которые нужно удалить:   ");
+                    if (delete <= 0)
                     {
-                        PrintError("Невозможно удалить отрицательное количество строк!");
-                        isCorrect = false;
+                        PrintError("Возможно удалить только положительное количество строк!");
                     }
-                    else if (delete + start - 1 > jagged.GetLength(0))
+                    else if (delete - 1 + start - 1 > jagged.GetLength(0))
                     {
-                        PrintError("В массиве меньше строк!");
-                        isCorrect = false;
+                        PrintError("В массиве недостаточно строк!");
                     }
-                    else
-                    {
-                        isCorrect = true;
-                    }
-                } while (!isCorrect);
+                } while (delete <= 0 || delete - 1 + start - 1 > jagged.GetLength(0));
 
                 int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
-                for (int p = 0; p < start; p++)
+                uint resultIndex = 0;
+                for (int p = 0; p < start - 1; p++, resultIndex++)
                 {
+                    result[resultIndex] = new int[jagged[p].Length]; 
                     for (int q = 0; q < jagged[p].Length; q++)
                     {
-                        result[p][q] = jagged[p][q];
+                        result[resultIndex][q] = jagged[p][q];
                     }
                 }
 
-                for (int p = start + delete - 1; p < jagged.GetLength(0); p++)
+                for (int p = start + delete - 1; p < jagged.GetLength(0); p++, resultIndex++)
                 {
+                    result[resultIndex] = new int[jagged[p].Length];
                     for (int q = 0; q < jagged[p].Length; q++)
                     {
-                        result[p - delete][q] = jagged[p][q];
+                        result[resultIndex][q] = jagged[p][q];
                     }
                 }
                 jagged = result;
@@ -544,18 +549,6 @@ namespace Library
         private static bool CheckTableSize(int size)
         {
             return !(size <= 0 || size > MaxSize);
-        }
-
-        /// <summary>
-        /// Получает ввод пользователя
-        /// </summary>
-        /// <returns>Строка введённая пользователем</returns>
-        public static string? ReadData()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            string? choice = Console.ReadLine();
-            Console.ResetColor();
-            return choice;
         }
     }
 } 
