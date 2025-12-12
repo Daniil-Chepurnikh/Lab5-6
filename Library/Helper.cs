@@ -32,18 +32,6 @@ namespace Library
         }
 
         /// <summary>
-        /// Печатаем красивые сообщения пользователю
-        /// </summary>
-        /// <param name="message">Сообщение на печать</param>
-        /// <param name="color">Цвет печать</param>
-        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
-        {
-            Console.ForegroundColor = color;
-            Console.Write(message);
-            Console.ResetColor();
-        }
-
-        /// <summary>
         /// Проверяет таблицу на пустоту
         /// </summary>
         /// <param name="matrix">Проверяемая таблица</param>
@@ -63,44 +51,7 @@ namespace Library
             return jagged.Length == 0;
         }
 
-        /// <summary>
-        /// Печатает меню и принимает выбор пользователя
-        /// </summary>
-        /// <param name="menu">Массив возможных действий</param>
-        /// <returns>Выбранное действие</returns>
-        public static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность:")
-        {
-            uint action;
-            string? choice;
-            do
-            {
-                bool isCorrectAction;
-                do
-                {
-                    PrintMessage(message + '\n');
-                    for (uint p = 0; p < menu.Length; p++)
-                    {
-                        PrintMessage($"  {p + 1} " + menu[p] + '\n' + '\n', ConsoleColor.White);
-                    }
-
-                    PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
-                    isCorrectAction = uint.TryParse(ReadData(), out action);
-                    if (action > menu.Length || action == 0)
-                    {
-                        PrintError();
-                        isCorrectAction = false;
-                    }
-                } while (!isCorrectAction);
-
-                PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
-                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
-                choice = ReadData();
-
-            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
-
-            PrintMessage("Приступаю к выполнению команды" + '\n');
-            return action;
-        }
+        #region Чтение-печать
 
         /// <summary>
         /// Читает целое число и сообщает об ошибках ввода оного
@@ -130,12 +81,77 @@ namespace Library
         /// Сообщает об ошибках
         /// </summary>
         /// <param name="error">Печатаемая ошибка</param>
-        private static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
+        public static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Ошибка: " + error);
             Console.ResetColor();
         }
+
+        /// <summary>
+        /// Получает ввод пользователя
+        /// </summary>
+        /// <returns>Строка введённая пользователем</returns>
+        public static string? ReadData()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            string? choice = Console.ReadLine();
+            Console.ResetColor();
+            return choice;
+        }
+
+        /// <summary>
+        /// Печатает меню и принимает выбор пользователя
+        /// </summary>
+        /// <param name="menu">Массив возможных действий</param>
+        /// <returns>Выбранное действие</returns>
+        public static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность:", string checkChoice = "Вы выбрали дейстиве: ")
+        {
+            uint action;
+            string? choice;
+            do
+            {
+                bool isCorrectAction;
+                do
+                {
+                    PrintMessage(message + '\n');
+                    for (uint p = 0; p < menu.Length; p++)
+                    {
+                        PrintMessage($"  {p + 1} " + menu[p] + '\n' + '\n', ConsoleColor.White);
+                    }
+
+                    PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
+                    isCorrectAction = uint.TryParse(ReadData(), out action);
+                    if (action > menu.Length || action == 0)
+                    {
+                        PrintError();
+                        isCorrectAction = false;
+                    }
+                } while (!isCorrectAction);
+
+                PrintMessage(checkChoice + menu[action - 1] + '\n', ConsoleColor.White);
+                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
+                choice = ReadData();
+
+            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
+
+            PrintMessage("Приступаю к выполнению команды" + '\n');
+            return action;
+        }
+
+        /// <summary>
+        /// Печатаем красивые сообщения пользователю
+        /// </summary>
+        /// <param name="message">Сообщение на печать</param>
+        /// <param name="color">Цвет печать</param>
+        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(message);
+            Console.ResetColor();
+        }
+
+        #endregion
 
         /// <summary>
         /// Здоровается, начинает работу
@@ -245,62 +261,51 @@ namespace Library
             }
             else
             {
-                bool isCorrect;
                 int start;
                 do
                 {
-                    int strings = jagged.GetLength(0);
-                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:");
-                    if (start < 0)
+                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:   ");
+                    if (start <= 0)
                     {
-                        PrintError("Номер строки не может быть отрицательным числом!");
-                        isCorrect = false;
+                        PrintError("Номер строки должен быть положительным числом!");
                     }
-                    else if (start >= strings)
+                    else if (start > jagged.GetLength(0))
                     {
-                        PrintError("В массиве меньше строк!");
-                        isCorrect = false;
+                        PrintError("В массиве недостаточно строк!");
                     }
-                    else
-                    {
-                        isCorrect = true;
-                    }
-                } while (!isCorrect);
+                } while (start <= 0 || start > jagged.GetLength(0));
 
                 int delete;
                 do
                 {
-                    delete = ReadInteger("Введите количество строк, которые нужно удалиить:");
-                    if (delete < 0)
+                    delete = ReadInteger("Введите количество строк, которые нужно удалить:   ");
+                    if (delete <= 0)
                     {
-                        PrintError("Невозможно удалить отрицательное количество строк!");
-                        isCorrect = false;
+                        PrintError("Возможно удалить только положительное количество строк!");
                     }
-                    else if (delete + start - 1 > jagged.GetLength(0))
+                    else if (delete - 1 + start - 1 > jagged.GetLength(0))
                     {
-                        PrintError("В массиве меньше строк!");
-                        isCorrect = false;
+                        PrintError("В массиве недостаточно строк!");
                     }
-                    else
-                    {
-                        isCorrect = true;
-                    }
-                } while (!isCorrect);
+                } while (delete <= 0 || delete - 1 + start - 1 > jagged.GetLength(0));
 
                 int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
-                for (int p = 0; p < start; p++)
+                uint resultIndex = 0;
+                for (int p = 0; p < start - 1; p++, resultIndex++)
                 {
+                    result[resultIndex] = new int[jagged[p].Length]; 
                     for (int q = 0; q < jagged[p].Length; q++)
                     {
-                        result[p][q] = jagged[p][q];
+                        result[resultIndex][q] = jagged[p][q];
                     }
                 }
 
-                for (int p = start + delete - 1; p < jagged.GetLength(0); p++)
+                for (int p = start + delete - 1; p < jagged.GetLength(0); p++, resultIndex++)
                 {
+                    result[resultIndex] = new int[jagged[p].Length];
                     for (int q = 0; q < jagged[p].Length; q++)
                     {
-                        result[p - delete][q] = jagged[p][q];
+                        result[resultIndex][q] = jagged[p][q];
                     }
                 }
                 jagged = result;
@@ -544,18 +549,6 @@ namespace Library
         private static bool CheckTableSize(int size)
         {
             return !(size <= 0 || size > MaxSize);
-        }
-
-        /// <summary>
-        /// Получает ввод пользователя
-        /// </summary>
-        /// <returns>Строка введённая пользователем</returns>
-        public static string? ReadData()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            string? choice = Console.ReadLine();
-            Console.ResetColor();
-            return choice;
         }
     }
 } 
