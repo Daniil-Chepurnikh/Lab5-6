@@ -1,5 +1,6 @@
 ﻿using Library;
 using System;
+using System.Drawing;
 
 namespace StringWork
 {
@@ -88,7 +89,7 @@ namespace StringWork
             Swap(prepareString, 0, prepareString.Length - 1);
 
             string finalString = string.Join(" ", prepareString);
-            Console.WriteLine(finalString);
+            Helper.PrintMessage(finalString, ConsoleColor.White);
         }
 
         /// <summary>
@@ -116,20 +117,65 @@ namespace StringWork
             return stringSprlit;
         }
 
-        private static bool CheckPunctuation(string[] str) // TODO: доделать функцию
+        /// <summary>
+        /// Проверяет строку на соответствие требованиям задания
+        /// </summary>
+        /// <param name="str">Проверяемая строка</param>
+        /// <returns>True если строка правильная</returns>
+        private static bool CheckString(string str) // TODO: доделать функцию
         {
             bool result = false;
-
-            for (uint p = 0; p < str.Length; p++)
+            char[] strArray = str.Trim().ToCharArray();
+            uint points = 0; // точки
+            uint commas = 0; // запятые
+            uint semicolons = 0; // точки с запятой
+            uint colons = 0; // двоеточия
+            uint exclamations = 0; // восклицательные знаки
+            uint questions = 0; // вопросительные знаки
+            for (uint p = 0; p < strArray.Length; p++)
             {
-                if (str[p] == ",")
+                if (strArray[p] == ',' && commas == 1)
                 {
-
+                    commas++;
+                    Helper.PrintError("Ошибка пунктуациии с повтором запятых");
+                }
+                else if (strArray[p] == '.' && points == 1)
+                {
+                    Helper.PrintError("Ошибка пунктуациии с повтором точек");
+                    points++;
+                }
+                else if (strArray[p] == ':' && colons == 1)
+                {
+                    Helper.PrintError("Ошибка пунктуациии с повтором двоеточий");
+                    colons++;
+                }
+                else if (strArray[p] == ';' && semicolons == 1)
+                {
+                    Helper.PrintError("Ошибка пунктуациии с повтором точек с запятой");
+                    semicolons++;
+                }
+                else if (strArray[p] == '!' && exclamations == 1)
+                {
+                    Helper.PrintError("Ошибка пунктуациии с повтором восклицательных знаков");
+                    exclamations++;
+                }
+                else if (strArray[p] == '?' && questions == 1)
+                {
+                    Helper.PrintError("Ошибка пунктуациии с повтором вопроситьльных знаков");
+                    questions++;
+                }
+                else
+                {
+                    commas = 0;
+                    points = 0;
+                    colons = 0;
+                    semicolons = 0;
+                    exclamations = 0;
+                    questions = 0;
+                    result = true;
                 }
             }
             return result;
         }
-
-
     }
 }

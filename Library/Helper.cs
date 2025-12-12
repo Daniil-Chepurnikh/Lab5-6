@@ -81,7 +81,7 @@ namespace Library
         /// Сообщает об ошибках
         /// </summary>
         /// <param name="error">Печатаемая ошибка</param>
-        private static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
+        public static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Ошибка: " + error);
