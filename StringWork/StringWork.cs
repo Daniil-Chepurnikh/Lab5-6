@@ -85,11 +85,21 @@ namespace StringWork
                     }
             }
 
-            string[] prepareString = PrepareString(newString);
-            Swap(prepareString, 0, prepareString.Length - 1);
+            if (!string.IsNullOrEmpty(newString))
+            {
+                if (CheckString(newString))
+                {
+                    string[] prepareString = PrepareString(newString);
+                    Swap(prepareString, 0, prepareString.Length - 1);
 
-            string finalString = string.Join(" ", prepareString);
-            Helper.PrintMessage(finalString, ConsoleColor.White);
+                    string finalString = string.Join(" ", prepareString);
+                    Helper.PrintMessage(finalString, ConsoleColor.White);
+                }
+            }
+            else
+            {
+                Helper.PrintError("Строка пустая");
+            }
         }
 
         /// <summary>
@@ -137,31 +147,31 @@ namespace StringWork
                 if (strArray[p] == ',' && commas == 1)
                 {
                     commas++;
-                    Helper.PrintError("Ошибка пунктуациии с повтором запятых");
+                    Helper.PrintError("Повтор запятых");
                 }
                 else if (strArray[p] == '.' && points == 1)
                 {
-                    Helper.PrintError("Ошибка пунктуациии с повтором точек");
+                    Helper.PrintError("Повтор точек");
                     points++;
                 }
                 else if (strArray[p] == ':' && colons == 1)
                 {
-                    Helper.PrintError("Ошибка пунктуациии с повтором двоеточий");
+                    Helper.PrintError("Повтор двоеточий");
                     colons++;
                 }
                 else if (strArray[p] == ';' && semicolons == 1)
                 {
-                    Helper.PrintError("Ошибка пунктуациии с повтором точек с запятой");
+                    Helper.PrintError("Повтор точек с запятой");
                     semicolons++;
                 }
                 else if (strArray[p] == '!' && exclamations == 1)
                 {
-                    Helper.PrintError("Ошибка пунктуациии с повтором восклицательных знаков");
+                    Helper.PrintError("Повтор восклицательных знаков");
                     exclamations++;
                 }
                 else if (strArray[p] == '?' && questions == 1)
                 {
-                    Helper.PrintError("Ошибка пунктуациии с повтором вопроситьльных знаков");
+                    Helper.PrintError("Повтор вопроситьльных знаков");
                     questions++;
                 }
                 else
