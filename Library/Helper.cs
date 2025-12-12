@@ -105,7 +105,7 @@ namespace Library
         /// </summary>
         /// <param name="menu">Массив возможных действий</param>
         /// <returns>Выбранное действие</returns>
-        public static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность:")
+        public static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность:", string checkChoice = "Вы выбрали дейстиве: ")
         {
             uint action;
             string? choice;
@@ -129,7 +129,7 @@ namespace Library
                     }
                 } while (!isCorrectAction);
 
-                PrintMessage("Вы выбрали дейстиве: " + menu[action - 1] + '\n', ConsoleColor.White);
+                PrintMessage(checkChoice + menu[action - 1] + '\n', ConsoleColor.White);
                 PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
                 choice = ReadData();
 
