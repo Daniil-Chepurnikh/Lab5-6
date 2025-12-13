@@ -16,6 +16,12 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
+        /// <summary>
+        /// Получает размер таблицы
+        /// </summary>
+        /// <param name="error">Сообщение об ошибке</param>
+        /// <param name="message">Предложение к вводу</param>
+        /// <returns>Корректный размер</returns>
         private static int GetTableSize(string error = "Количество строк должно быть больше нуля и меньше максимального допустимого значения - 100!", string message = "Введите количество строк таблицы:  ")
         {
             int size = -1;
@@ -193,7 +199,7 @@ namespace Library
                 do
                 {
                     newString = ReadInteger("Введите количество элементов в добавляемой строке:  ");
-                    if (newString != columns)
+                    if (newString != columns && !CheckEmpty(table))
                     {
                         PrintError($"Элементов в новой строке должно быть {columns}, чтобы массив не стал рваным!");
                         isCorrect = false;
