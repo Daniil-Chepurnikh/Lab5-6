@@ -90,7 +90,7 @@ namespace StringWork
         {
             if (!string.IsNullOrEmpty(newString))
             {
-                if (CheckString(newString))
+                if (CheckPunctuation(newString))
                 {
                     string[] prepareString = PrepareString(newString);
                     Swap(prepareString, 0, prepareString.Length - 1);
@@ -137,7 +137,7 @@ namespace StringWork
         /// </summary>
         /// <param name="str">Проверяемая строка</param>
         /// <returns>True если строка правильная</returns>
-        private static bool CheckString(string str)
+        private static bool CheckPunctuation(string str)
         {
             bool result = false;
             char[] strArray = str.Trim().ToCharArray();

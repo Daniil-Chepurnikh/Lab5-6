@@ -16,7 +16,13 @@ namespace Library
         /// </summary>
         private static Stopwatch stopwatch = new();
 
-        private static int GetTableSize(string error = "Количество строк должно быть больше нуля и меньше максимального допустимого значения - 100!", string message = "Введите количество строк таблицы:  ")
+        /// <summary>
+        /// Получает размер таблицы
+        /// </summary>
+        /// <param name="error">Сообщение об ошибке</param>
+        /// <param name="message">Предложение к вводу</param>
+        /// <returns>Корректный размер</returns>
+        private static int GetTableSize(string message = "Введите количество строк таблицы:  ", string error = "Количество строк должно быть больше нуля и меньше максимального допустимого значения - 100!")
         {
             int size = -1;
             while (size <= 0 || size > MaxSize)
@@ -181,32 +187,41 @@ namespace Library
         /// <returns>Изменённая таблица</returns>
         public static int[,] AddString(int[,] table)
         {
+            int[,] result;
             if (!CheckTableSize(table.GetLength(0) + 1))
             {
                 PrintError("Массив вышел из допустимого диапазона!");
+                result = table;
             }
             else
             {
-                int columns = table.GetLength(1);
-                int newString;
-                bool isCorrect;
-                do
+                if (CheckEmpty(table))
                 {
-                    newString = ReadInteger("Введите количество элементов в добавляемой строке:  ");
-                    if (newString != columns)
+                    result = new int[1, GetTableSize("Введите количество элементов в добавляемой строке:  ", $"Количество элементов в добавляемой строке должно быть больше 0 и меньше или равно {MaxSize}!")];
+                }
+                else
+                {
+                    int newString;
+                    do
                     {
-                        PrintError($"Элементов в новой строке должно быть {columns}, чтобы массив не стал рваным!");
-                        isCorrect = false;
-                    }
-                    else
-                    {
-                        isCorrect = true;
-                    }
-                } while (!isCorrect);
+                        newString = GetTableSize("Введите количество элементов в добавляемой строке:  ");
+                        if (newString != table.GetLength(1))
+                        {
+                            PrintError($"Количество элементов в добавляемой строке должно быть {table.GetLength(1)}, чтобы массив оставался двумерным!");
+                        }
 
-                int strings = table.GetLength(0);
-                int[,] result = new int[table.GetLength(0) + 1, table.GetLength(1)];
-                
+                    } while (newString != table.GetLength(1));
+                    
+                    result = new int[table.GetLength(0) + 1, newString];
+                    for (int p = 1; p < table.GetLength(0) + 1; p++)
+                    {
+                        for (int q = 0; q < table.GetLength(1); q++)
+                        {
+                            result[p, q] = table[p - 1, q];
+                        }
+                    }
+                }
+
                 string[] addMenu =
                 [
                         "Добавить строку самостоятельно",
@@ -216,7 +231,7 @@ namespace Library
                 {
                     case 1:
                         {
-                            for (int p = 0; p < newString; p++)
+                            for (int p = 0; p < result.Length / result.GetLength(0); p++)
                             {
                                 result[0, p] = ReadInteger("Введите элемент массива:  ");
                             }
@@ -224,23 +239,15 @@ namespace Library
                         }
                     case 2:
                         {
-                            for (int p = 0; p < newString; p++)
+                            for (int p = 0; p < result.Length / result.GetLength(0); p++)
                             {
                                 result[0, p] = random.Next(0, 9);
                             }
                             break;
                         }
                 }
-                for (int p = 1; p < strings + 1; p++)
-                {
-                    for (int q = 0; q < columns; q++)
-                    {
-                        result[p, q] = table[p - 1, q];
-                    }
-                }
-                table = result;
             }
-            return table;
+            return result;
         }
 
         /// <summary>
@@ -255,6 +262,7 @@ namespace Library
         /// <returns></returns>
         public static int[][] DeleteStrings(int[][] jagged)
         {
+            int strings = jagged.GetLength(0);
             if (CheckEmpty(jagged))
             {
                 PrintError("Невозможно удалить строки в пустом массиве!");
@@ -283,13 +291,13 @@ namespace Library
                     {
                         PrintError("Возможно удалить только положительное количество строк!");
                     }
-                    else if (delete - 1 + start - 1 > jagged.GetLength(0))
+                    else if (strings + 1 - start < delete)
                     {
                         PrintError("В массиве недостаточно строк!");
                     }
-                } while (delete <= 0 || delete - 1 + start - 1 > jagged.GetLength(0));
+                } while (delete <= 0 || strings + 1 - start < delete);
 
-                int[][] result = new int[jagged.GetLength(0) - delete][]; // сколько строк было - сколько надо удалить
+                int[][] result = new int[strings - delete][]; // сколько строк было - сколько надо удалить
                 uint resultIndex = 0;
                 for (int p = 0; p < start - 1; p++, resultIndex++)
                 {
@@ -386,7 +394,7 @@ namespace Library
                 randomJagged = new int[strings][];
                 for (uint p = 0; p < strings; p++)
                 {
-                    int columns = GetTableSize("Количество столбцов должно быть большу нуля!", "Введите количество элементов в строке:  ");
+                    int columns = GetTableSize("Введите количество элементов в строке:  ", "Количество столбцов должно быть большу нуля!");
                     if (!CheckTableSize(columns))
                     {
                         PrintError("Массив вышел из допустимого диапазона!");
@@ -410,7 +418,7 @@ namespace Library
         private static int[,] MakeRandomTable(int[,] randomTable)
         {
             int strings = GetTableSize();
-            int columns = GetTableSize("Количество столбцов должно быть больше нуля и меньше максимального допустимого значния 100!", "Введите количество столбцов таблицы: ");
+            int columns = GetTableSize("Введите количество столбцов таблицы: ", "Количество столбцов должно быть больше нуля и меньше максимального допустимого значния 100!");
             if (CheckTableSize(strings) && CheckTableSize(columns))
             {
                 randomTable = new int[strings, columns];
