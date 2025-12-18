@@ -94,7 +94,7 @@ namespace Lab5_6
                                 {
                                     case 1:
                                         {
-                                            jagged = Library.Work.CreateTable(jagged);
+                                            jagged = Work.CreateTable(jagged);
                                             break;
                                         }
                                     case 2:
@@ -104,7 +104,7 @@ namespace Lab5_6
                                         }
                                     case 3:
                                         {
-                                            jagged = Library.Work.DeleteStrings(jagged);
+                                            jagged = Work.DeleteStrings(jagged);
                                             break;
                                         }
                                     case 4:

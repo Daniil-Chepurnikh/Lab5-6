@@ -1,6 +1,5 @@
 ﻿using Library;
 using System;
-using System.Drawing;
 
 namespace StringWork
 {
@@ -139,6 +138,5 @@ namespace StringWork
             string[] stringSprlit = stringTrim.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             return stringSprlit;
         }
-
     }
 }
