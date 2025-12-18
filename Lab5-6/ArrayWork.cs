@@ -14,9 +14,9 @@ namespace Lab5_6
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Helper.StartWork();
+            Work.Start();
             DoWork();
-            Helper.FinishWork();
+            Work.Finish();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Lab5_6
             ];
             do
             {
-                switch (Helper.PrintMenu(mainMenu, "Это главное меню! Выберете, что вы хотите сделать:"))
+                switch (Print.Menu(mainMenu, "Это главное меню! Выберете, что вы хотите сделать:"))
                 {
                     case 1:
                         { // работа с двумерным массивом
@@ -49,21 +49,21 @@ namespace Lab5_6
                             string main = "Нет";
                             do
                             {
-                                switch (Helper.PrintMenu(matrixMenu, "Выберете, что вы хотите сделать далее с двумерным массивом"))
+                                switch (Print.Menu(matrixMenu, "Выберете, что вы хотите сделать далее с двумерным массивом"))
                                 {
                                     case 1:
                                         {
-                                            matrix = Helper.CreateTable(matrix);
+                                            matrix = Work.CreateTable(matrix);
                                             break;
                                         }
                                     case 2:
                                         {
-                                            Helper.PrintTable(matrix);
+                                            Print.Table(matrix);
                                             break;
                                         }
                                     case 3:
                                         {
-                                            matrix = Helper.AddString(matrix);
+                                            matrix = Work.AddString(matrix);
                                             break;
                                         }
                                     case 4:
@@ -90,21 +90,21 @@ namespace Lab5_6
                             string main = "Нет";
                             do
                             {
-                                switch (Helper.PrintMenu(jaggedMenu, "Выберете, что вы хотите сделать далее с рваным массивом"))
+                                switch (Print.Menu(jaggedMenu, "Выберете, что вы хотите сделать далее с рваным массивом"))
                                 {
                                     case 1:
                                         {
-                                            jagged = Helper.CreateTable(jagged);
+                                            jagged = Library.Work.CreateTable(jagged);
                                             break;
                                         }
                                     case 2:
                                         {
-                                            Helper.PrintTable(jagged);
+                                            Print.Table(jagged);
                                             break;
                                         }
                                     case 3:
                                         {
-                                            jagged = Helper.DeleteStrings(jagged);
+                                            jagged = Library.Work.DeleteStrings(jagged);
                                             break;
                                         }
                                     case 4:
@@ -117,7 +117,7 @@ namespace Lab5_6
                             break;
                         } // конец работы с рваным массивом
                     case 3:
-                        { // конец работы программы
+                        {
                             end = "Да";
                             break;
                         }
