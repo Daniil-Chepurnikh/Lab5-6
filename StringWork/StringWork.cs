@@ -1,6 +1,5 @@
 ﻿using Library;
 using System;
-using System.Drawing;
 
 namespace StringWork
 {
@@ -8,9 +7,9 @@ namespace StringWork
     {
         static void Main(string[] args)
         {
-            Helper.StartWork();
+            Work.Start();
             DoWork();
-            Helper.FinishWork();
+            Work.Finish();
         }
 
         private static void DoWork()
@@ -65,21 +64,30 @@ namespace StringWork
             ];
 
             string newString = "";
-            switch (Helper.PrintMenu(mainMenu, "Выберете, как вы хотите создать строку?"))
+            switch (Print.Menu(mainMenu, "Выберете, как вы хотите создать строку?"))
             {
                 case 1:
                     {
-                        Helper.PrintMessage("Введите строку:  ", ConsoleColor.White);
-                        newString = Helper.ReadData();
+                        Print.Message("Введите строку:  ", ConsoleColor.White);
+                        newString = Read.Data();
                         break;
                     }
                 case 2:
                     {
-                        newString = testMenu[Helper.PrintMenu(testMenu, "Выберете нужную строку", "Вы выбрали строку:  ") - 1];
+                        newString = testMenu[Print.Menu(testMenu, "Выберете нужную строку", "Вы выбрали строку:  ") - 1];
                         break;
                     }
             }
-            _ = SwapWords(newString);
+            string finalString = SwapWords(newString);
+
+            if (string.IsNullOrEmpty(finalString))
+            {
+                Print.Message("Строка не прошла отбор" + '\n', ConsoleColor.White);
+            }
+            else
+            {
+                Print.Message(finalString + '\n', ConsoleColor.White);
+            }
         }
 
         /// <summary>
@@ -88,23 +96,22 @@ namespace StringWork
         /// <param name="newString">Строка для смены</param>
         private static string SwapWords(string newString)
         {
+            string finalString = "";
+
             if (!string.IsNullOrEmpty(newString))
             {
-                if (CheckPunctuation(newString))
+                if (Check.String(newString))
                 {
                     string[] prepareString = PrepareString(newString);
                     Swap(prepareString, 0, prepareString.Length - 1);
-
-                    string finalString = string.Join(" ", prepareString);
-                    Helper.PrintMessage("Изменённая строка: ", ConsoleColor.White);
-                    Helper.PrintMessage(finalString + '\n', ConsoleColor.White);
+                    finalString = string.Join(" ", prepareString);
                 }
             }
             else
             {
-                Helper.PrintError("Строка пустая");
+                Print.Error("Строка пустая!");
             }
-            return newString;
+            return finalString;
         }
         
         /// <summary>
@@ -130,71 +137,6 @@ namespace StringWork
             string stringTrim = str.Trim();
             string[] stringSprlit = stringTrim.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             return stringSprlit;
-        }
-
-        /// <summary>
-        /// Проверяет строку на соответствие требованиям задания
-        /// </summary>
-        /// <param name="str">Проверяемая строка</param>
-        /// <returns>True если строка правильная</returns>
-        private static bool CheckPunctuation(string str)
-        {
-            bool result = false;
-            char[] strArray = str.Trim().ToCharArray();
-            uint points = 0; // точки
-            uint commas = 0; // запятые
-            uint semicolons = 0; // точки с запятой
-            uint colons = 0; // двоеточия
-            uint exclamations = 0; // восклицательные знаки
-            uint questions = 0; // вопросительные знаки
-            for (uint p = 0; p < strArray.Length; p++)
-            {
-                if (strArray[p] == ' ')
-                {
-                    continue;
-                }
-                if (strArray[p] == ',' && (commas == 1 || p == 0))
-                {
-                    commas++;
-                    Helper.PrintError("Постановка запятых неверная");
-                }
-                else if (strArray[p] == '.' && ( points == 1 || p == 0))
-                {
-                    Helper.PrintError("Постановка точек неверная");
-                    points++;
-                }
-                else if (strArray[p] == ':' && (colons == 1 || p == 0))
-                {
-                    Helper.PrintError("Постановка двоеточий неверная");
-                    colons++;
-                }
-                else if (strArray[p] == ';' && (semicolons == 1 || p == 0))
-                {
-                    Helper.PrintError("Постановка точек с запятой неверная");
-                    semicolons++;
-                }
-                else if (strArray[p] == '!' && (exclamations == 1 || p == 0))
-                {
-                    Helper.PrintError("Постановка восклицательных знаков неверная");
-                    exclamations++;
-                }
-                else if (strArray[p] == '?' && (questions == 1 || p == 0))
-                {
-                    Helper.PrintError("Постановка вопроситьльных знаков неверная");
-                    questions++;
-                }
-                else
-                {
-                    commas = 0;
-                    points = 0;
-                    colons = 0;
-                    semicolons = 0;
-                    exclamations = 0;
-                    questions = 0;
-                    result = true;
-                }
-            }
-            return result;
         }
     }
 }

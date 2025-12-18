@@ -3,14 +3,259 @@ using System.Diagnostics;
 
 namespace Library
 {
-    
+    /// <summary>
+    /// Все необходимые проверки
+    /// </summary>
+    public class Check
+    {
+        public const short MaxSize = 100;
+
+        /// <summary>
+        /// Проверяет таблицу на пустоту
+        /// </summary>
+        /// <param name="matrix">Проверяемая таблица</param>
+        /// <returns>True если пустая</returns>
+        public static bool Empty(int[,] matrix)
+        {
+            return matrix.Length == 0;
+        }
+
+        /// <summary>
+        /// Проверяет таблицу на пустоту
+        /// </summary>
+        /// <param name="jagged">Проверяемая таблица</param>
+        /// <returns>True если пустая</returns>
+        public static bool Empty(int[][] jagged)
+        {
+            return jagged.Length == 0;
+        }
+
+        /// <summary>
+        /// Проверяет вхождение размера в допустимый диапазон
+        /// </summary>
+        /// <param name="size">Проверяемый размер</param>
+        /// <returns>True если размеры корректные</returns>
+        public static bool TableSize(int size)
+        {
+            return size > 0 && size <= MaxSize;
+        }
+
+        /// <summary>
+        /// Проверяет строку на соответствие требованиям задания
+        /// </summary>
+        /// <param name="str">Проверяемая строка</param>
+        /// <returns>True если строка правильная</returns>
+        public static bool String(string str)
+        {
+            bool result = true;
+            uint punctuation = 0;
+            char[] strArray = str.Trim().ToCharArray();
+            for (uint p = 0; p < strArray.Length; p++)
+            {
+                if (strArray[p] == ' ')
+                {
+                    continue;
+                }
+
+                if (char.IsDigit(strArray[p]))
+                {
+                    Print.Error("Встречено число!");
+                    result = false;
+                    break;
+                }
+
+                if (char.IsPunctuation(strArray[p]) && p == 0)
+                {
+                    Print.Error("Строка не должна начинаться со знака препинания");
+                    result = false;
+                    break;
+                }
+
+                if (char.IsPunctuation(strArray[p]))
+                {
+                    ++punctuation;
+                }
+                else
+                {
+                    punctuation = 0;
+                }
+
+                if (punctuation == 2)
+                {
+                    Print.Error("Знаки препинания не должны идти подряд!");
+                    result = false;
+                    break;
+                }
+            }
+            return result;
+        }
+
+    }
+
+    /// <summary>
+    /// Пользовательский вывод
+    /// </summary>
+    public class Print
+    {
+        /// <summary>
+        /// Сообщает об ошибках
+        /// </summary>
+        /// <param name="error">Печатаемая ошибка</param>
+        public static void Error(string error = "Нераспознанная команда! Проверьте корректность ввода")
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Ошибка: " + error);
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Печатает меню и принимает выбор пользователя
+        /// </summary>
+        /// <param name="menu">Массив возможных действий</param>
+        /// <returns>Выбранное действие</returns>
+        public static uint Menu(string[] menu, string message = "Программа реализует следующую функциональность:", string checkChoice = "Вы выбрали дейстиве: ")
+        {
+            uint action;
+            string? choice;
+            do
+            {
+                bool isCorrectAction;
+                do
+                {
+                    Message(message + '\n');
+                    for (uint p = 0; p < menu.Length; p++)
+                    {
+                        Message($"  {p + 1} " + menu[p] + '\n' + '\n', ConsoleColor.White);
+                    }
+
+                    Message("Введите номер выбранного действия:  ", ConsoleColor.White);
+                    isCorrectAction = uint.TryParse(Read.Data(), out action);
+                    if (action > menu.Length || action == 0)
+                    {
+                        Error();
+                        isCorrectAction = false;
+                    }
+                } while (!isCorrectAction);
+
+                Message(checkChoice + menu[action - 1] + '\n', ConsoleColor.White);
+                Message("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
+                choice = Read.Data();
+
+            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
+
+            Message("Приступаю к выполнению команды" + '\n');
+            return action;
+        }
+
+        /// <summary>
+        /// Печатаем красивые сообщения пользователю
+        /// </summary>
+        /// <param name="message">Сообщение на печать</param>
+        /// <param name="color">Цвет печать</param>
+        public static void Message(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(message);
+            Console.ResetColor();
+        }
+
+        /// <summary>
+        /// Печатает двумерный массив
+        /// </summary>
+        /// <param name="table">Печатаемый массив</param>
+        public static void Table(int[,] table)
+        {
+            if (Check.Empty(table))
+            {
+                Message("Матрица пустая" + '\n', ConsoleColor.White);
+                return;
+            }
+
+            int count = 0;
+            int length = table.GetLength(1);
+            foreach (int item in table)
+            {
+                Message(item + " ", ConsoleColor.White);
+                count++;
+                if (count == length)
+                {
+                    Message("\n");
+                    count = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Печатает рваный массив
+        /// </summary>
+        /// <param name="table">Печатаемый массив</param>
+        public static void Table(int[][] jagged)
+        {
+            if (Check.Empty(jagged))
+            {
+                Message("Рваный массив пустой" + '\n', ConsoleColor.White);
+            }
+            else
+            {
+                for (uint p = 0; p < jagged.GetLength(0); p++)
+                {
+                    foreach (int item in jagged[p])
+                    {
+                        Message(item + " ", ConsoleColor.White);
+                    }
+                    Message("\n");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Получение различного пользовательского ввода
+    /// </summary>
+    public class Read
+    {
+        /// <summary>
+        /// Читает целое число и сообщает об ошибках ввода оного
+        /// </summary>
+        /// <param name="message">Приглашение к нужному вводу</param>
+        /// <param name="error">Уведомление об ошибочном вводе</param>
+        /// <returns>Прочитанное число</returns>
+        public static int Integer(string message = "Введите количество элементов массива:  ", string error = "Вы не ввели целое число в разрешённом дипазоне!")
+        {
+            bool isNumber;
+            int number;
+            do
+            {
+                Print.Message(message, ConsoleColor.White);
+
+                isNumber = int.TryParse(Data(), out number);
+                if (!isNumber)
+                {
+                    Print.Error(error);
+                }
+
+            } while (!isNumber);
+            return number;
+        }
+
+        /// <summary>
+        /// Получает ввод пользователя
+        /// </summary>
+        /// <returns>Ввод или NULL</returns>
+        public static string? Data()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            string? choice = Console.ReadLine();
+            Console.ResetColor();
+            return choice;
+        }
+    }
+
     /// <summary>
     /// Вспомогательные функции
     /// </summary>
-    public class Helper
+    public class Work
     {
-        const short MaxSize = 100;
-
         /// <summary>
         /// Время выполнения программы
         /// </summary>
@@ -25,159 +270,36 @@ namespace Library
         private static int GetTableSize(string message = "Введите количество строк таблицы:  ", string error = "Количество строк должно быть больше нуля и меньше максимального допустимого значения - 100!")
         {
             int size = -1;
-            while (size <= 0 || size > MaxSize)
+            while (!Check.TableSize(size))
             {
-                size = ReadInteger(message);
-                if (size <= 0 || size > MaxSize)
+                size = Read.Integer(message);
+                if (!Check.TableSize(size))
                 {
-                    PrintError(error);
-                    size = -1;
+                    Print.Error(error);
                 }
             }
             return size;
         }
 
         /// <summary>
-        /// Проверяет таблицу на пустоту
-        /// </summary>
-        /// <param name="matrix">Проверяемая таблица</param>
-        /// <returns>True если пустая</returns>
-        private static bool CheckEmpty(int[,] matrix)
-        {
-            return matrix.Length == 0;
-        }
-
-        /// <summary>
-        /// Проверяет таблицу на пустоту
-        /// </summary>
-        /// <param name="jagged">Проверяемая таблица</param>
-        /// <returns>True если пустая</returns>
-        private static bool CheckEmpty(int[][] jagged)
-        {
-            return jagged.Length == 0;
-        }
-
-        #region Чтение-печать
-
-        /// <summary>
-        /// Читает целое число и сообщает об ошибках ввода оного
-        /// </summary>
-        /// <param name="message">Приглашение к нужному вводу</param>
-        /// <param name="error">Уведомление об ошибочном вводе</param>
-        /// <returns>Прочитанное число</returns>
-        private static int ReadInteger(string message = "Введите количество элементов массива:  ", string error = "Вы не ввели целое число в разрешённом дипазоне!")
-        {
-            bool isNumber;
-            int number;
-            do
-            {
-                PrintMessage(message, ConsoleColor.White);
-
-                isNumber = int.TryParse(ReadData(), out number);
-                if (!isNumber)
-                {
-                    PrintError(error);
-                }
-
-            } while (!isNumber);
-            return number;
-        }
-
-        /// <summary>
-        /// Сообщает об ошибках
-        /// </summary>
-        /// <param name="error">Печатаемая ошибка</param>
-        public static void PrintError(string error = "Нераспознанная команда! Проверьте корректность ввода")
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ошибка: " + error);
-            Console.ResetColor();
-        }
-
-        /// <summary>
-        /// Получает ввод пользователя
-        /// </summary>
-        /// <returns>Строка введённая пользователем</returns>
-        public static string? ReadData()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            string? choice = Console.ReadLine();
-            Console.ResetColor();
-            return choice;
-        }
-
-        /// <summary>
-        /// Печатает меню и принимает выбор пользователя
-        /// </summary>
-        /// <param name="menu">Массив возможных действий</param>
-        /// <returns>Выбранное действие</returns>
-        public static uint PrintMenu(string[] menu, string message = "Программа реализует следующую функциональность:", string checkChoice = "Вы выбрали дейстиве: ")
-        {
-            uint action;
-            string? choice;
-            do
-            {
-                bool isCorrectAction;
-                do
-                {
-                    PrintMessage(message + '\n');
-                    for (uint p = 0; p < menu.Length; p++)
-                    {
-                        PrintMessage($"  {p + 1} " + menu[p] + '\n' + '\n', ConsoleColor.White);
-                    }
-
-                    PrintMessage("Введите номер выбранного действия:  ", ConsoleColor.White);
-                    isCorrectAction = uint.TryParse(ReadData(), out action);
-                    if (action > menu.Length || action == 0)
-                    {
-                        PrintError();
-                        isCorrectAction = false;
-                    }
-                } while (!isCorrectAction);
-
-                PrintMessage(checkChoice + menu[action - 1] + '\n', ConsoleColor.White);
-                PrintMessage("Вы уверены в своём выборе? Если уверены, напишите ДА(в любом регистре), любой другой ввод будет воспринят как НЕТ:  ", ConsoleColor.White);
-                choice = ReadData();
-
-            } while (!string.Equals(choice, "Да", StringComparison.OrdinalIgnoreCase));
-
-            PrintMessage("Приступаю к выполнению команды" + '\n');
-            return action;
-        }
-
-        /// <summary>
-        /// Печатаем красивые сообщения пользователю
-        /// </summary>
-        /// <param name="message">Сообщение на печать</param>
-        /// <param name="color">Цвет печать</param>
-        public static void PrintMessage(string message = "Ввод корректен", ConsoleColor color = ConsoleColor.Green)
-        {
-            Console.ForegroundColor = color;
-            Console.Write(message);
-            Console.ResetColor();
-        }
-
-        #endregion
-
-        /// <summary>
         /// Здоровается, начинает работу
         /// </summary>
-        public static void StartWork()
+        public static void Start()
         {
-            PrintMessage("Здравствуйте!" + '\n', ConsoleColor.White);
-            PrintMessage("Работа начата" + '\n', ConsoleColor.White);
+            Print.Message("Здравствуйте!" + '\n', ConsoleColor.White);
+            Print.Message("Работа начата" + '\n', ConsoleColor.White);
             stopwatch.Start();
         }
 
         /// <summary>
         /// Уведомляет о завершении, времени выполнения и прощается
         /// </summary>
-        public static void FinishWork()
+        public static void Finish()
         {
-            PrintMessage("Работа закончена" + '\n', ConsoleColor.White);
+            Print.Message("Работа закончена" + '\n', ConsoleColor.White);
             stopwatch.Stop();
-            PrintMessage($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n');
-            PrintMessage("До свидания!");
+            Print.Message($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n');
+            Print.Message("До свидания!");
         }
 
         /// <summary>
@@ -188,16 +310,16 @@ namespace Library
         public static int[,] AddString(int[,] table)
         {
             int[,] result;
-            if (!CheckTableSize(table.GetLength(0) + 1))
+            if (!Check.TableSize(table.GetLength(0) + 1))
             {
-                PrintError("Массив вышел из допустимого диапазона!");
+                Print.Error("Массив вышел из допустимого диапазона!");
                 result = table;
             }
             else
             {
-                if (CheckEmpty(table))
+                if (Check.Empty(table))
                 {
-                    result = new int[1, GetTableSize("Введите количество элементов в добавляемой строке:  ", $"Количество элементов в добавляемой строке должно быть больше 0 и меньше или равно {MaxSize}!")];
+                    result = new int[1, GetTableSize("Введите количество элементов в добавляемой строке:  ", $"Количество элементов в добавляемой строке должно быть больше 0 и меньше или равно {Check.MaxSize}!")];
                 }
                 else
                 {
@@ -207,7 +329,7 @@ namespace Library
                         newString = GetTableSize("Введите количество элементов в добавляемой строке:  ");
                         if (newString != table.GetLength(1))
                         {
-                            PrintError($"Количество элементов в добавляемой строке должно быть {table.GetLength(1)}, чтобы массив оставался двумерным!");
+                            Print.Error($"Количество элементов в добавляемой строке должно быть {table.GetLength(1)}, чтобы массив оставался двумерным!");
                         }
 
                     } while (newString != table.GetLength(1));
@@ -227,13 +349,13 @@ namespace Library
                         "Добавить строку самостоятельно",
                         "Добавить строку случайно"
                 ];
-                switch (PrintMenu(addMenu, "Выберете способ добавления элементов:  "))
+                switch (Print.Menu(addMenu, "Выберете способ добавления элементов:  "))
                 {
                     case 1:
                         {
                             for (int p = 0; p < result.Length / result.GetLength(0); p++)
                             {
-                                result[0, p] = ReadInteger("Введите элемент массива:  ");
+                                result[0, p] = Read.Integer("Введите элемент массива:  ");
                             }
                             break;
                         }
@@ -263,37 +385,37 @@ namespace Library
         public static int[][] DeleteStrings(int[][] jagged)
         {
             int strings = jagged.GetLength(0);
-            if (CheckEmpty(jagged))
+            if (Check.Empty(jagged))
             {
-                PrintError("Невозможно удалить строки в пустом массиве!");
+                Print.Error("Невозможно удалить строки в пустом массиве!");
             }
             else
             {
                 int start;
                 do
                 {
-                    start = ReadInteger("Введите индекс, с которого начинается удаление строк:   ");
+                    start = Read.Integer("Введите индекс, с которого начинается удаление строк:   ");
                     if (start <= 0)
                     {
-                        PrintError("Номер строки должен быть положительным числом!");
+                        Print.Error("Номер строки должен быть положительным числом!");
                     }
                     else if (start > jagged.GetLength(0))
                     {
-                        PrintError("В массиве недостаточно строк!");
+                        Print.Error("В массиве недостаточно строк!");
                     }
                 } while (start <= 0 || start > jagged.GetLength(0));
 
                 int delete;
                 do
                 {
-                    delete = ReadInteger("Введите количество строк, которые нужно удалить:   ");
+                    delete = Read.Integer("Введите количество строк, которые нужно удалить:   ");
                     if (delete <= 0)
                     {
-                        PrintError("Возможно удалить только положительное количество строк!");
+                        Print.Error("Возможно удалить только положительное количество строк!");
                     }
                     else if (strings + 1 - start < delete)
                     {
-                        PrintError("В массиве недостаточно строк!");
+                        Print.Error("В массиве недостаточно строк!");
                     }
                 } while (delete <= 0 || strings + 1 - start < delete);
 
@@ -333,7 +455,7 @@ namespace Library
                     "Создать таблицу самостоятельно",
                     "Создать таблицу случайно"
             ];
-            switch (PrintMenu(arrayMenu, "Выберете способ создания массива:  "))
+            switch (Print.Menu(arrayMenu, "Выберете способ создания массива:  "))
             {
                 case 1:
                     {
@@ -361,7 +483,7 @@ namespace Library
                     "Создать таблицу случайно"
             ];
             
-            switch (PrintMenu(arrayMenu, "Выберете способ создания массива:"))
+            switch (Print.Menu(arrayMenu, "Выберете способ создания массива:"))
             {
                case 1:
                     {
@@ -385,9 +507,9 @@ namespace Library
         private static int[][] MakeRandomTable(int[][] randomJagged)
         {
             int strings = GetTableSize();
-            if (!CheckTableSize(strings))
+            if (!Check.TableSize(strings))
             {
-                PrintError("Массив вышел из допустимого диапазона!");
+                Print.Error("Массив вышел из допустимого диапазона!");
             }
             else
             {
@@ -395,9 +517,9 @@ namespace Library
                 for (uint p = 0; p < strings; p++)
                 {
                     int columns = GetTableSize("Введите количество элементов в строке:  ", "Количество столбцов должно быть большу нуля!");
-                    if (!CheckTableSize(columns))
+                    if (!Check.TableSize(columns))
                     {
-                        PrintError("Массив вышел из допустимого диапазона!");
+                        Print.Error("Массив вышел из допустимого диапазона!");
                         break;
                     }
                     randomJagged[p] = new int[columns];
@@ -419,7 +541,7 @@ namespace Library
         {
             int strings = GetTableSize();
             int columns = GetTableSize("Введите количество столбцов таблицы: ", "Количество столбцов должно быть больше нуля и меньше максимального допустимого значния 100!");
-            if (CheckTableSize(strings) && CheckTableSize(columns))
+            if (Check.TableSize(strings) && Check.TableSize(columns))
             {
                 randomTable = new int[strings, columns];
                 for (int q = 0; q < strings; q++)
@@ -432,7 +554,7 @@ namespace Library
             }
             else
             {
-                PrintError("Массив вышел из допустимого диапазона!");
+                Print.Error("Массив вышел из допустимого диапазона!");
             }
             return randomTable;
         }
@@ -444,25 +566,25 @@ namespace Library
         private static int[][] ReadTable(int[][] readJagged)
         {
             int strings = GetTableSize();
-            if (!CheckTableSize(strings))
+            if (!Check.TableSize(strings))
             {
-                PrintError("Массив вышел из допустимого диапазона!");
+                Print.Error("Массив вышел из допустимого диапазона!");
             }
             else
             {
                 readJagged = new int[strings][];
                 for (int p = 0; p < strings; p++)
                 {
-                    int columns = GetTableSize("Количество столбцов должно быть больше нуля и меньше максимального допустимого значения 100!", "Введите количество элементов строки:  ");
-                    if (!CheckTableSize(columns))
+                    int columns = GetTableSize("Введите количество элементов строки:  ", "Количество столбцов должно быть больше нуля и меньше максимального допустимого значения 100!");
+                    if (!Check.TableSize(columns))
                     {
-                        PrintError("Массив вышел из допустимого диапазона!");
+                        Print.Error("Массив вышел из допустимого диапазона!");
                         break;
                     }
                     readJagged[p] = new int[columns];
                     for (int q = 0; q < columns; q++)
                     {
-                        readJagged[p][q] = ReadInteger("Введите элемент массива:  ");
+                        readJagged[p][q] = Read.Integer("Введите элемент массива:  ");
                     }
                 }
             }
@@ -476,87 +598,24 @@ namespace Library
         private static int[,] ReadTable(int[,] readMatrix)
         {
             int strings = GetTableSize();
-            int columns = GetTableSize("Количество столбцов должно быть больше нуля и меньше максимального допустимого значения - 100!", "Введите количество столбцов таблицы: ");
-            if (CheckTableSize(strings) && CheckTableSize(columns))
+            int columns = GetTableSize("Введите количество столбцов таблицы: ", "Количество столбцов должно быть больше нуля и меньше максимального допустимого значения - 100!");
+            if (Check.TableSize(strings) && Check.TableSize(columns))
             {
                 readMatrix = new int[strings, columns];
                 for (int q = 0; q < strings; q++)
                 {
                     for (int p = 0; p < columns; p++)
                     {
-                        readMatrix[q, p] = ReadInteger("Введите элемент таблицы:  ");
+                        readMatrix[q, p] = Read.Integer("Введите элемент таблицы:  ");
                     }
                 }
             }
             else
             {
-                PrintError("Массив вышел из допустимого диапазона!");
+                Print.Error("Массив вышел из допустимого диапазона!");
             }
             return readMatrix;
         }
         #endregion
-
-        #region Печать массива
-
-        /// <summary>
-        /// Печатает двумерный массив
-        /// </summary>
-        /// <param name="table">Печатаемый массив</param>
-        public static void PrintTable(int[,] table)
-        {
-            if (CheckEmpty(table))
-            {
-                PrintMessage("Матрица пустая" + '\n', ConsoleColor.White);
-                return;
-            }
-
-            int count = 0;
-            int length = table.GetLength(1);
-            foreach (int item in table)
-            {
-                PrintMessage(item + " ", ConsoleColor.White);
-                count++;
-                if (count == length)
-                {
-                    PrintMessage("\n");
-                    count = 0;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Печатает рваный массив
-        /// </summary>
-        /// <param name="table">Печатаемый массив</param>
-        public static void PrintTable(int[][] jagged)
-        {
-            if (CheckEmpty(jagged))
-            {
-                PrintMessage("Рваный массив пустой" + '\n', ConsoleColor.White);
-            }
-            else
-            {
-                for (uint p = 0; p < jagged.GetLength(0); p++)
-                {
-                    foreach (int item in jagged[p])
-                    {
-                        PrintMessage(item + " ", ConsoleColor.White); 
-                    }
-                    PrintMessage("\n");
-                }
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Проверяет вхождение размера в допустимый диапазон
-        /// </summary>
-        /// <param name="size">Проверяемый размер</param>
-        /// <returns>True если размеры корректные</returns>
-        private static bool CheckTableSize(int size)
-        {
-            return !(size <= 0 || size > MaxSize);
-        }
     }
 } 
