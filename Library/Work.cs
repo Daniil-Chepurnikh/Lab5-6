@@ -89,7 +89,6 @@ namespace Library
             }
             return result;
         }
-
     }
 
     /// <summary>

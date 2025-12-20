@@ -94,10 +94,11 @@ namespace StringWork
         /// Меняет первое и последнее слово в строке местами
         /// </summary>
         /// <param name="newString">Строка для смены</param>
-        private static string SwapWords(string newString)
+        private static string SwapWords(string input)
         {
+            string newString = input.Replace('\t', ' ');
+            
             string finalString = "";
-
             if (!string.IsNullOrEmpty(newString))
             {
                 if (Check.String(newString))
