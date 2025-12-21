@@ -108,10 +108,12 @@ namespace Library
         }
 
         /// <summary>
-        /// Печатает меню и принимает выбор пользователя
+        /// Печатает меню в виде нуерованного списка
         /// </summary>
-        /// <param name="menu">Массив возможных действий</param>
-        /// <returns>Выбранное действие</returns>
+        /// <param name="menu">Печатаемое меню</param>
+        /// <param name="message">Приглашение к выбору</param>
+        /// <param name="checkChoice">Сообщение для проверки выбора</param>
+        /// <returns></returns>
         public static uint Menu(string[] menu, string message = "Программа реализует следующую функциональность:", string checkChoice = "Вы выбрали дейстиве: ")
         {
             uint action;
