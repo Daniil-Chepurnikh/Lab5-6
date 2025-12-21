@@ -66,7 +66,7 @@ namespace Library
 
                 if (char.IsPunctuation(strArray[p]) && p == 0)
                 {
-                    Print.Error("Строка не должна начинаться со знака препинания");
+                    Print.Error("Строка не должна начинаться со знака препинания!");
                     result = false;
                     break;
                 }
@@ -297,8 +297,8 @@ namespace Library
         {
             Print.Message("Работа закончена" + '\n', ConsoleColor.White);
             stopwatch.Stop();
-            Print.Message($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n');
-            Print.Message("До свидания!");
+            Print.Message($"Время выполнения: {stopwatch.ElapsedMilliseconds} мс" + '\n', ConsoleColor.White);
+            Print.Message("До свидания!", ConsoleColor.White);
         }
 
         /// <summary>

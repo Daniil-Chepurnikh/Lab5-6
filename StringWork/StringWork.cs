@@ -80,13 +80,9 @@ namespace StringWork
             }
             string finalString = SwapWords(newString);
 
-            if (string.IsNullOrEmpty(finalString))
+            if (!string.IsNullOrEmpty(finalString))
             {
-                Print.Message("Строка не прошла отбор" + '\n', ConsoleColor.White);
-            }
-            else
-            {
-                Print.Message(finalString + '\n', ConsoleColor.White);
+                Print.Message("Изменённая строка:" + finalString + '\n', ConsoleColor.White);
             }
         }
 
